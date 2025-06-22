@@ -1,0 +1,110 @@
+/* Sales.css */
+.sales-container {
+  padding: 4rem 0;
+  width: 100%; /* Changed from 85vw */
+  max-width: 1350px; /* Changed from 1440px */
+  margin: 0 auto;
+}
+
+.scroll-wrapper {
+  position: relative;
+  padding: 0 2rem;
+}
+
+.sale-products {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 2rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-bottom: 1rem;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;
+  grid-auto-columns: minmax(250px, 1fr);
+}
+
+.sale-products::-webkit-scrollbar {
+  display: none;
+}
+
+.card-container {
+  scroll-snap-align: start;
+  transition: transform 0.3s ease;
+}
+
+.card-container:hover {
+  transform: translateY(-5px);
+}
+
+.all-products {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 2rem 0;
+}
+
+.all-products button {
+  background-color: #007BFF;
+  width: auto; /* Changed from fixed 230px */
+  min-width: 180px; /* Minimum width */
+  height: auto; /* Changed from fixed 55px */
+  padding: 1em 2.5em; /* Responsive padding */
+  border-radius: 4px;
+  transition: 
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.3s ease,
+    background-color 0.3s ease;
+  color: white;
+  border: none;
+  font-size: 1rem; /* Base size */
+  font-weight: 500;
+  margin: 0 auto; /* Centering instead of 35rem */
+  display: block;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .all-products button {
+    font-size: 1.1rem;
+    padding: 1.2em 3em;
+    min-width: 230px;
+  }
+}
+
+@media (max-width: 480px) {
+  .all-products button {
+    width: 100%; /* Full width on mobile */
+    max-width: 300px;
+    padding: 0.8em 1.5em;
+    font-size: 0.9rem;
+  }
+}
+
+.all-products button:hover {
+  transform: scale(1.02);
+  background-color: #1b89ff;
+}
+
+.all-products button:focus {
+  outline: none;
+}
+
+.all-products button:active {
+  background-color: #007bff;
+}
+
+.all-products button:hover {
+  transform: scale(1.02);
+  background-color: #1b89ff;
+}
+
+.all-products button:focus {
+  outline: none;
+}
+
+.all-products button:active {
+  background-color: #007bff;
+}

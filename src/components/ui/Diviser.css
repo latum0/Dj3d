@@ -1,0 +1,40 @@
+
+.text-container{
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 12px;
+    
+
+}
+
+.diviser{
+    width: 25px;
+    height: 50px;
+    background-color: #007bff;
+    border-radius: 3px;
+}
+
+.text-container p{
+    color: #007bff;
+    font-weight: 600;
+    font-size: 16px;
+    padding-top: 10px;
+    
+}
+
+
+.diviser-title {
+    display: flex;
+    gap: 150px;
+    margin-top: 24px;
+  }
+  
+  .diviser-title p {
+    font-size: 36px;
+    font-weight: 600;
+    white-space: pre;
+
+  }
+ 

@@ -1,0 +1,92 @@
+/* The sidebar is now 250px wide when expanded,
+   but initially completely hidden offscreen except for a 20px visible tab.
+   It will slide into view on hover.
+*/
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100vh;
+  background-color: #fff;
+  border-right: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateX(-230px);  /* Only 20px remains visible */
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+
+.sidebar:hover {
+  transform: translateX(0);
+}
+
+.sidebar-header {
+  padding: 20px 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* When the sidebar is hidden, only a narrow strip is visible. 
+   You might want to leave the icons visible.
+   Here we ensure that the text content has full opacity only when hovered.
+*/
+.logo-text {
+  font-weight: 600;
+  font-size: 16px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar:hover .logo-text {
+  opacity: 1;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 15px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  color: #333;
+  text-decoration: none;
+  gap: 12px;
+  transition: background-color 0.2s;
+}
+
+/* Hide item text by default */
+.sidebar-item span {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Show item text when viewport is hovered */
+.sidebar:hover .sidebar-item span {
+  opacity: 1;
+}
+
+.sidebar-item:hover {
+  background-color: #f5f5f5;
+}
+
+.sidebar-item.active {
+  background-color: #f0f0f0;
+  font-weight: 500;
+}
+
+.sidebar-footer {
+  padding: 15px 0;
+  border-top: 1px solid #e0e0e0;
+}

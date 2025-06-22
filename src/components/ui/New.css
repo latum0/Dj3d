@@ -1,0 +1,205 @@
+/* Global Styles */
+.main-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    background: #fff;
+  }
+  
+
+  .hero-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .case {
+    background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url('src/assets/newbg.jpg');
+    background-size: cover;
+    background-position: center;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .razer-section {
+    background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url('src/assets/laptop.webp');
+    background-size: cover;
+    background-position: center;
+    min-height: 500px;
+    display: flex;
+    align-items: flex-end;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .case-content, .razer-content {
+    padding: 2rem;
+    position: relative;
+    z-index: 2;
+    max-width: 400px;
+  }
+  
+  .case-content h2, .razer-content h3 {
+    font-size: 2.5rem;
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+  
+  .case-content p, .razer-content p {
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    font-size: 1.1rem;
+  }
+  
+  
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 4rem;
+  }
+  
+  .new-card {
+    min-height: 400px;
+    display: flex;
+    align-items: flex-end;
+    padding: 2rem;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .new-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 100%);
+    z-index: 1;
+  }
+  
+  .speaker-card {
+    background: url('src/assets/setup-new.jpg') center/cover;
+  }
+  
+  .perfume-card {
+    background: url('src/assets/keyboard-new.jpg') center/cover;
+  }
+  
+  .new-card h3 {
+    position: relative;
+    z-index: 2;
+    color: #ffffff;
+    font-size: 2rem;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+ 
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    padding: 4rem 0;
+  }
+  
+  .feature-card {
+    text-align: center;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 4px;
+  }
+  
+  .feature-icon {
+    width: 100px;
+    height: 100px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0 auto 1.5rem;
+    border-radius: 50%;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  
+  .delivery-icon {
+    background-image: url('src/assets/truckicon.jpg');
+  }
+  
+  .support-icon {
+    background-image: url('src/assets/supportIcon.jpg');
+  }
+  
+  .guarantee-icon {
+    background-image: url('src/assets/guaranteeIcon.png');
+  }
+  
+  .feature-card h4 {
+    font-size: 1.25rem;
+    color: #2A254B;
+    margin-bottom: 1rem;
+  }
+  
+  .feature-card p {
+    color: #4E4D93;
+    line-height: 1.6;
+  }
+  
+  
+  .shop-now-btn {
+    background: #ffffff;
+    color: #2A254B;
+    padding: 1rem 2.5rem;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    font-weight: 600;
+  }
+  
+  .shop-now-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+ 
+  @media (max-width: 768px) {
+    .hero-section {
+      grid-template-columns: 1fr;
+    }
+  
+    .news-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .case,
+    .razer-section {
+      min-height: 400px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .main-container {
+      padding: 2rem 1rem;
+    }
+    
+    .case-content h2,
+    .razer-content h3 {
+      font-size: 2rem;
+    }
+    
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+    }
+  }

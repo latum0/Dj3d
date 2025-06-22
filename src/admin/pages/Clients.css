@@ -1,0 +1,346 @@
+.clients-page {
+  width: 80%;
+  margin: 0 auto;
+  /* Centers the content */
+  padding: 20px;
+  background-color: #ffffff;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+.client-id,
+.client-phone {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.client-form-styled {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.client-form-styled h2 {
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+.client-form-styled label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.client-form-styled input,
+.client-form-styled select {
+  margin-top: 5px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.button-secondary {
+  background: #f5f5f5;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.button-primary {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* MODAL STYLES */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 25px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.modal-content h2 {
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+
+.modal-form label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.modal-form input,
+.modal-form select {
+  margin-top: 5px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.button-secondary {
+  background: #f5f5f5;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.button-primary {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.action-menu {
+  position: relative;
+  display: inline-block;
+  height: 100%;
+}
+
+.action-menu-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: #fff;
+  min-width: 200px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  border-radius: 4px;
+  padding: 8px 0;
+  border: 1px solid #e0e0e0;
+}
+
+.action-menu-content.menu-up {
+  bottom: 100%;
+  top: auto;
+}
+
+.action-menu-content.show {
+  display: block;
+}
+
+.action-menu-item {
+  padding: 8px 16px;
+  text-decoration: none;
+  display: block;
+  color: #333;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  border: none;
+  background: none;
+  font-size: 14px;
+}
+
+.action-menu-item:hover {
+  background-color: #f5f5f5;
+}
+
+.action-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.action-button:hover {
+  background-color: #f0f0f0;
+}
+
+/* Styles pour le modal de profil */
+.profile-modal {
+  max-width: 600px;
+  width: 90%;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.profile-header h2 {
+  margin: 0;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.profile-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #4a6cf7;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.profile-info h3 {
+  margin: 0;
+  color: #333;
+}
+
+.profile-info p {
+  margin: 5px 0 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.detail-label {
+  font-weight: 500;
+  color: #555;
+}
+
+.detail-value {
+  color: #333;
+}
+
+.profile-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+/* Ajoutez ces styles à votre fichier Clients.css */
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Couleurs des statuts */
+.status-badge[style*="28a745"] {
+  /* Actif */
+  background-color: #36c758 !important;
+}
+
+.status-badge[style*="ffc107"] {
+  /* VIP */
+  background-color: #ffc107 !important;
+  color: #212529;
+}
+
+.status-badge[style*="dc3545"] {
+  /* Inactif */
+  background-color: #dc3545 !important;
+}
+
+/* Styles pour le select coloré */
+select option[value="Actif"] {
+  color: #28a745;
+}
+
+select option[value="VIP"] {
+  color: #ffc107;
+}
+
+select option[value="Inactif"] {
+  color: #dc3545;
+}
+
+@keyframes fadeIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

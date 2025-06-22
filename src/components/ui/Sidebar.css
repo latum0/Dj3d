@@ -1,0 +1,28 @@
+.sidebar {
+    padding: 20px;
+    width: 200px;
+    color: #333;
+  }
+  
+  .sidebar h4 {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #000;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar li {
+    margin: 5px 0;
+    color: #888;
+    cursor: pointer;
+  }
+  
+  .sidebar li.active {
+    color: blue;
+    font-weight: bold;
+  }
+  

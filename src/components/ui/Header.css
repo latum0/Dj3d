@@ -1,0 +1,231 @@
+/* ---------- Global Reset & Base Styles ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+/* ---------- Fixed Nav Container ---------- */
+.nav-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-bottom: 1px solid #eaeaea;
+  z-index: 1000;
+}
+
+/* ---------- Navbar ---------- */
+.navbar {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 80px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+}
+
+/* ---------- Logo ---------- */
+.navbar-logo {
+  cursor: pointer;
+}
+
+.logo-img {
+  width: 200px;
+  height: auto;
+}
+
+/* ---------- Center Section ---------- */
+.navbar-center {
+  display: flex;
+  justify-content: center;
+}
+
+/* ---------- Navigation Links ---------- */
+.navbar-links {
+  display: flex;
+  gap: 30px;
+  white-space: nowrap;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.navbar-links a:hover {
+  color: #007bff;
+}
+
+.lineUnder {
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #007bff;
+  border-radius: 2px;
+}
+
+/* ---------- Right Side: Search + Icons ---------- */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* ---------- Modern Search Box ---------- */
+.search-wrapper {
+  position: relative;
+  width: 300px;
+}
+
+.modern-search-input {
+  width: 100%;
+  padding: 10px 40px 10px 16px;
+  font-size: 1rem;
+  color: #333;
+  background-color: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 50px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.modern-search-input::placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+
+.modern-search-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+  background-color: #fff;
+}
+
+/* ---------- Icons Container ---------- */
+.navbar-icons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* ---------- Icon Styles ---------- */
+.fav-logo,
+.cart-logo,
+.profile-logo,
+.logout-icon {
+  font-size: 1.8rem;
+  color: #333;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.fav-logo:hover,
+.cart-logo:hover,
+.profile-logo:hover,
+.logout-icon:hover {
+  transform: scale(1.1);
+}
+
+/* ---------- Recommendations Dropdown ---------- */
+.recommendations-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.recommendations-dropdown li {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  border-bottom: 1px solid #eee;
+}
+
+.recommendations-dropdown li:last-child {
+  border-bottom: none;
+}
+
+.recommendations-dropdown li:hover {
+  background: #f4f4f4;
+}
+
+.recommendations-dropdown img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 12px;
+}
+
+.recommendations-dropdown p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* ---------- Responsive Adjustments ---------- */
+@media (max-width: 1024px) {
+  .navbar {
+    grid-template-columns: auto auto auto;
+    gap: 20px;
+  }
+  
+  .navbar-center {
+    justify-content: flex-start;
+  }
+  
+  .search-wrapper {
+    width: 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    height: auto;
+    padding: 15px 20px;
+    gap: 15px;
+  }
+  
+  .navbar-logo {
+    justify-self: center;
+  }
+  
+  .navbar-center {
+    justify-content: center;
+    order: 3;
+  }
+  
+  .navbar-right {
+    order: 2;
+    justify-content: center;
+  }
+  
+  .search-wrapper {
+    width: 100%;
+  }
+  
+  .navbar-links {
+    gap: 20px;
+  }
+}

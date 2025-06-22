@@ -1,0 +1,10 @@
+.user-greeting {
+    text-align: right;
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+  
+  .user-greeting span {
+    color: blue;
+  }
+  

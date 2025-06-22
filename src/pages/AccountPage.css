@@ -1,0 +1,13 @@
+.account-page {
+    padding: 20px;
+    background-color: #f8f8f8;
+    min-height: 100vh;
+    margin-top: 70px;
+  }
+  
+  .content-container {
+    display: flex;
+    gap: 40px;
+    margin-top: 20px;
+  }
+  

@@ -1,0 +1,53 @@
+{
+  "name": "ecommerce-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@cloudinary/react": "^1.14.1",
+    "@cloudinary/url-gen": "^1.21.0",
+    "@reduxjs/toolkit": "^2.6.0",
+    "axios": "^1.8.1",
+    "file-saver": "^2.0.5",
+    "framer-motion": "^12.6.3",
+    "jspdf": "^3.0.1",
+    "jspdf-autotable": "^5.0.2",
+    "lucide-react": "^0.503.0",
+    "prop-types": "^15.8.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-feather": "^2.0.10",
+    "react-hot-toast": "^2.5.2",
+    "react-icons": "^5.5.0",
+    "react-rating-stars-component": "^2.2.0",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.5.0",
+    "react-stars": "^2.2.5",
+    "react-swiper": "^0.1.5",
+    "react-transition-group": "^4.4.5",
+    "recharts": "^2.15.3",
+    "swiper": "^11.2.6",
+    "uuid": "^11.1.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.21.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^15.15.0",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.1.6",
+    "vite": "^6.2.0"
+  }
+}
