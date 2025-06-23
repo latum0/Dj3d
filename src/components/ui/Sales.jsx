@@ -41,7 +41,7 @@ const Sales = () => {
     <section className="products-section">
       {/* Divider Component */}
       <div className="diviser-container">
-        <Diviser name="Sales" />
+        <Diviser name="Products" />
       </div>
 
       {/* Section Header */}

@@ -5,7 +5,7 @@ import './Home.css';
 import BestS from '../components/ui/Best-selling';
 import ImgDev from '../components/ui/ImgDev'
 import AllProductsSection from '../components/ui/AllProductsSection'
-import New from '../components/ui/New';
+
 
 
 
@@ -15,11 +15,12 @@ const Home = () => {
         <div className="home-container">
 
             <Hero />
-            <Sales />
-            <BestS />
+            <BestS name="Products" title="Bxplore Our Products" />
+            <BestS name="This Month" title="Best Selling Products" />
+
             <ImgDev />
-            <AllProductsSection />
-            <New />
+            <BestS name="Our Products" title="Best Selling Products" />
+
 
 
         </div>

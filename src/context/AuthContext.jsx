@@ -45,6 +45,7 @@ export const AuthProvider = ({ children }) => {
           credentials: "include",
         });
         setGuestId(null);
+
       } catch {
         localStorage.removeItem("token");
         setUser(null);

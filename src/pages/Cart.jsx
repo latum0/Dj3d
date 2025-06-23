@@ -1,4 +1,3 @@
-// Cart.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Trash2, Plus, Minus, ArrowLeft, ShoppingBag } from "lucide-react";
@@ -28,7 +27,7 @@ const Cart = () => {
         });
         if (!response.ok) throw new Error("Failed to fetch cart");
         const data = await response.json();
-        setCart(data);
+        setCart(data ?? { items: [] });
       } catch (error) {
         console.error("Cart fetch error:", error);
         setCart({ items: [] });
@@ -64,7 +63,7 @@ const Cart = () => {
       });
       if (!response.ok) throw new Error("Failed to update quantity");
       const updated = await response.json();
-      setCart(updated);
+      setCart(updated ?? { items: [] });
     } catch (error) {
       console.error("Update quantity error:", error);
     }
@@ -79,19 +78,19 @@ const Cart = () => {
           "Content-Type": "application/json",
           ...(token && { Authorization: `Bearer ${token}` }),
         },
-        credentials: "include", // send guestId cookie if present
+        credentials: "include",
         body: JSON.stringify({ productId }),
       });
       if (!response.ok) throw new Error("Failed to remove item");
       const updated = await response.json();
-      setCart(updated);
+      setCart(updated ?? { items: [] });
     } catch (error) {
       console.error("Remove item error:", error);
     }
   };
 
   const clearCart = async () => {
-    if (!window.confirm("Êtes-vous sûr de vouloir vider votre panier ?")) return;
+    if (!window.confirm("Êtes-vous sûr de vouloir vider votre panier ?")) return;
     try {
       const token = localStorage.getItem("token");
       const response = await fetch("http://localhost:5000/api/cart/clear", {
@@ -109,13 +108,15 @@ const Cart = () => {
     }
   };
 
-  const subtotal = cart.items.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
+  // Safe defaults
+  const items = Array.isArray(cart.items) ? cart.items : [];
+  const subTotal = items.reduce(
+    (sum, item) => sum + (item?.product?.price ?? 0) * (item?.quantity ?? 0),
     0
   );
-  const tax = subtotal * 0.2;
-  const shipping = subtotal > 500 ? 0 : 9.99;
-  const total = subtotal + tax + shipping - discount;
+  const tax = subTotal * 0.2;
+  const shipping = subTotal > 500 ? 0 : 9.99;
+  const total = subTotal + tax + shipping - discount;
   const formatPrice = (price) =>
     price.toFixed(2).replace(".", ",") + " €";
 
@@ -233,7 +234,7 @@ const Cart = () => {
               <div className="summary-details">
                 <div className="summary-row">
                   <span>Sous-total</span>
-                  <span>{formatPrice(subtotal)}</span>
+                  <span>{formatPrice(subTotal)}</span>
                 </div>
                 {discount > 0 && (
                   <div className="summary-row discount">

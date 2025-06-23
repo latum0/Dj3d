@@ -11,24 +11,24 @@ const Footer = () => {
     };
 
     return (
-        <footer className="footer">
-            <div className="footer-container">
+        <footer className="site-footer">
+            <div className="site-footer-container">
                 {/* Subscribe Section */}
-                <div className="footer-section">
-                    <h2 className="footer-heading">Exclusive</h2>
-                    <div className="subscribe-section">
-                        <h3 className="section-title">Subscribe</h3>
-                        <p className="section-subtitle">Get 10% off your first order</p>
-                        <form onSubmit={handleSubmit} className="subscribe-form">
+                <div className="site-footer-section">
+                    <h2 className="site-footer-heading">Exclusive</h2>
+                    <div className="site-subscribe-section">
+                        <h3 className="site-section-title">Subscribe</h3>
+                        <p className="site-section-subtitle">Get 10% off your first order</p>
+                        <form onSubmit={handleSubmit} className="site-subscribe-form">
                             <input
                                 type="email"
                                 placeholder="Enter your email"
-                                className="email-input"
+                                className="site-email-input"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                             />
-                            <button type="submit" className="subscribe-button">
+                            <button type="submit" className="site-subscribe-button">
                                 Subscribe
                             </button>
                         </form>
@@ -36,45 +36,42 @@ const Footer = () => {
                 </div>
 
                 {/* Support Section */}
-                <div className="footer-section">
-                    <h3 className="section-title">Support</h3>
-                    <ul className="support-list">
-                        <li>Ill Bijoy sorani, Dhaka, DH 1515, Bangladesh.</li>
-                        <li>exclusive@gmail.com</li>
-                        <li>+88015-88888-9999</li>
+                <div className="site-footer-section">
+                    <h3 className="site-section-title">Support</h3>
+                    <ul className="site-support-list">
+                        <li>123 Business Street, City, State 12345</li>
+                        <li>support@exclusive.com</li>
+                        <li>+1 (555) 123-4567</li>
                     </ul>
                 </div>
 
                 {/* Account Section */}
-                <div className="footer-section">
-                    <h3 className="section-title">Account</h3>
-                    <div className="account-columns">
-                        <div className="account-column">
-                            <div className="account-item">My Account</div>
-                            <div className="account-item">Login / Register</div>
-                            <div className="account-item">Cart</div>
-                            <div className="account-item">Wishlist</div>
-                            <div className="account-item">Shop</div>
+                <div className="site-footer-section">
+                    <h3 className="site-section-title">Account</h3>
+                    <div className="site-account-columns">
+                        <div className="site-account-column">
+                            <div className="site-account-item">My Account</div>
+                            <div className="site-account-item">Login / Register</div>
+                            <div className="site-account-item">Cart</div>
+                            <div className="site-account-item">Wishlist</div>
+                            <div className="site-account-item">Shop</div>
                         </div>
-
                     </div>
                 </div>
 
-                <div className="footer-section">
-                    <h3 className="section-title">Quick Link</h3>
-                    <div className="account-item">Privacy Policy</div>
-                    <div className="account-item">Terms Of Use</div>
-                    <div className="account-item">FAQ</div>
-                    <div className="account-item">Contact</div>
+                {/* Quick Links Section */}
+                <div className="site-footer-section">
+                    <h3 className="site-section-title">Quick Links</h3>
+                    <div className="site-account-item">Privacy Policy</div>
+                    <div className="site-account-item">Terms Of Use</div>
+                    <div className="site-account-item">FAQ</div>
+                    <div className="site-account-item">Contact</div>
                 </div>
-
-                {/* Download App Section */}
-
             </div>
 
             {/* Copyright Section */}
-            <div className="copyright">
-                © Copyright 2025. All right reserved
+            <div className="site-copyright">
+                © Copyright 2025. All rights reserved
             </div>
         </footer>
     );

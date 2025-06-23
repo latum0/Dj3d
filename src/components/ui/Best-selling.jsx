@@ -5,7 +5,7 @@ import Card from './Card';
 import Diviser from './Diviser';
 import './Best-selling.css';
 
-function BestS() {
+function BestS({ name, title }) {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -43,7 +43,7 @@ function BestS() {
   return (
     <div className="sales-container">
       <div className="top-best-product-container">
-        <Diviser name="This Month" title="Best Selling Products" />
+        <Diviser name={name} title={title} />
         <button className="view-all-button" onClick={() => navigate('/ProductListingPage')}>
           View All
         </button>
@@ -58,7 +58,7 @@ function BestS() {
           <p>No products available.</p>
         ) : (
           products.map(product => (
-            <Card 
+            <Card
               key={product._id}
               id={product._id}
               img={product.image?.[0] || 'https://via.placeholder.com/150'}

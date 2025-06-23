@@ -5,6 +5,7 @@ import {
   MdOutlineShoppingCart,
   MdAccountCircle,
   MdLogout,
+  MdDesignServices,
 } from "react-icons/md";
 import { useAuth } from "../../context/AuthContext";
 
@@ -18,6 +19,7 @@ const Header = () => {
     home: true,
     about: false,
     contact: false,
+    customorder: false,
     login: false,
   });
 
@@ -28,6 +30,7 @@ const Header = () => {
       home: p === "/",
       about: p.startsWith("/about"),
       contact: p.startsWith("/contact"),
+      customorder: p.startsWith("/custom-order"),
       login: p.startsWith("/login"),
     });
   }, [location.pathname]);
@@ -39,10 +42,12 @@ const Header = () => {
       home: name === "home",
       about: name === "about",
       contact: name === "contact",
+      customorder: name === "customorder",
       login: name === "login",
     });
     if (name === "home") navigate("/");
     else if (name === "login") navigate("/login");
+    else if (name === "customorder") navigate("/custom-order");
     else navigate(`/${name}`);
   };
 
@@ -112,97 +117,112 @@ const Header = () => {
   };
 
   return (
-    <div className="nav-container">
-      <header className="navbar">
-        {/* Logo */}
-        <div className="navbar-logo" onClick={() => navigate("/")}>
-          <img
-            src="/src/assets/logoMC.png"
-            alt="Logo"
-            className="logo-img"
-          />
-        </div>
-
-        {/* Center Links */}
-        <div className="navbar-center">
-          <nav className="navbar-links">
-            <a href="/" onClick={(e) => linkNavbar(e, "home")}>
-              Home {links.home && <div className="lineUnder"></div>}
-            </a>
-            <a href="/about" onClick={(e) => linkNavbar(e, "about")}>
-              About {links.about && <div className="lineUnder"></div>}
-            </a>
-            <a href="/contact" onClick={(e) => linkNavbar(e, "contact")}>
-              Contact {links.contact && <div className="lineUnder"></div>}
-            </a>
-            {!user && (
-              <a href="/login" onClick={(e) => linkNavbar(e, "login")}>
-                Login {links.login && <div className="lineUnder"></div>}
-              </a>
-            )}
-          </nav>
-        </div>
-
-        {/* Search + Icons */}
-        <div className="navbar-right">
-          <div className="search-wrapper" ref={wrapperRef}>
-            <form onSubmit={onSearch}>
-              <input
-                ref={inputRef}
-                type="text"
-                placeholder="Que cherchez-vous ?"
-                className="modern-search-input"
-                value={searchTerm}
-                onChange={onInput}
-              />
-            </form>
-            {open && recs.length > 0 && (
-              <ul className="recommendations-dropdown">
-                {recs.map((p) => (
-                  <li
-                    key={p._id}
-                    onClick={() => navigate(`/products/${p._id}`)}
-                  >
-                    <img
-                      src={p.image?.[0] || "https://via.placeholder.com/50"}
-                      alt={p.name}
-                    />
-                    <div>
-                      <p>{p.name}</p>
-                      <p>${p.price.toFixed(2)}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-          <div className="navbar-icons">
-            {/* Cart always */}
-            <MdOutlineShoppingCart
-              className="cart-logo"
-              onClick={() => navigate("/cart")}
-              title="Panier"
+    <div className="main-nav-container">
+      <div className="main-navbar-wrapper">
+        <header className="main-navbar">
+          {/* Logo */}
+          <div className="main-navbar-logo" onClick={() => navigate("/")}>
+            <img
+              src="/src/assets/logoMC.png"
+              alt="Logo"
+              className="main-logo-img"
             />
-
-            {/* Profile & Logout only when logged in */}
-            {user && (
-              <>
-                <MdAccountCircle
-                  className="profile-logo"
-                  onClick={() => navigate("/accountpage")}
-                  title="Mon Compte"
-                />
-                <MdLogout
-                  className="logout-icon"
-                  onClick={handleLogout}
-                  title="Déconnexion"
-                />
-              </>
-            )}
           </div>
-        </div>
-      </header>
+
+          {/* Center Links */}
+          <div className="main-navbar-center">
+            <nav className="main-navbar-links">
+              <a href="/" onClick={(e) => linkNavbar(e, "home")}>
+                Home {links.home && <div className="main-line-under"></div>}
+              </a>
+              <a href="/about" onClick={(e) => linkNavbar(e, "about")}>
+                About {links.about && <div className="main-line-under"></div>}
+              </a>
+              <a href="/contact" onClick={(e) => linkNavbar(e, "contact")}>
+                Contact {links.contact && <div className="main-line-under"></div>}
+              </a>
+              <a href="/custom-order" onClick={(e) => linkNavbar(e, "customorder")}>
+                Custom Order {links.customorder && <div className="main-line-under"></div>}
+              </a>
+              {!user && (
+                <a href="/login" onClick={(e) => linkNavbar(e, "login")}>
+                  Login {links.login && <div className="main-line-under"></div>}
+                </a>
+              )}
+            </nav>
+          </div>
+
+          {/* Search + Icons */}
+          <div className="main-navbar-right">
+            <div className="main-search-wrapper" ref={wrapperRef}>
+              <form onSubmit={onSearch}>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  placeholder="What are you looking for?"
+                  className="main-search-input"
+                  value={searchTerm}
+                  onChange={onInput}
+                />
+              </form>
+              {open && recs.length > 0 && (
+                <ul className="main-recommendations-dropdown">
+                  {recs.map((p) => (
+                    <li
+                      key={p._id}
+                      onClick={() => navigate(`/product/${p._id}`)}
+                    >
+                      <img
+                        src={p.image?.[0] || "https://via.placeholder.com/50"}
+                        alt={p.name}
+                      />
+                      <div>
+                        <p>{p.name}</p>
+                        <p>${p.price.toFixed(2)}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            <div className="main-navbar-icons">
+              {/* Custom Order Button */}
+              <button
+                className="main-custom-order-btn"
+                onClick={() => navigate("/custom-order")}
+                title="Create Custom Order"
+              >
+                <MdDesignServices className="main-custom-order-icon" />
+                <span className="main-custom-order-text">Custom</span>
+              </button>
+
+              {/* Cart always */}
+              <MdOutlineShoppingCart
+                className="main-cart-logo"
+                onClick={() => navigate("/cart")}
+                title="Shopping Cart"
+              />
+
+              {/* Profile & Logout only when logged in */}
+              {user && (
+                <>
+                  <MdAccountCircle
+                    className="main-profile-logo"
+                    onClick={() => navigate("/accountPage")}
+                    title="My Account"
+                  />
+                  <MdLogout
+                    className="main-logout-icon"
+                    onClick={handleLogout}
+                    title="Logout"
+                  />
+                </>
+              )}
+            </div>
+          </div>
+        </header>
+      </div>
     </div>
   );
 };

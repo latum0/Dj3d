@@ -17,6 +17,7 @@ import AccountPage from "./pages/AccountPage";
 import Cart from "./pages/Cart";
 import ProductListingPage from "./pages/ProductListingPage";
 import Checkout from "./pages/Checkout";
+import CustomOrder from "./pages/CustomOrder";
 
 import Header from "./components/ui/Header";
 import Footer from "./components/ui/Footer";
@@ -72,6 +73,7 @@ function LayoutWrapper() {
 
 
         <Route path="/Editproducts" element={<ProductManagement />} />
+        <Route path="/custom-order" element={<CustomOrder />} />
 
         {/* Admin (protected) */}
         <Route element={<PrivateAdminRoute />}>
