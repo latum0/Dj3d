@@ -123,7 +123,7 @@ const Header = () => {
           {/* Logo */}
           <div className="main-navbar-logo" onClick={() => navigate("/")}>
             <img
-              src="/src/assets/logoMC.png"
+              src="/src/assets/logoBlue.png"
               alt="Logo"
               className="main-logo-img"
             />
@@ -141,9 +141,7 @@ const Header = () => {
               <a href="/contact" onClick={(e) => linkNavbar(e, "contact")}>
                 Contact {links.contact && <div className="main-line-under"></div>}
               </a>
-              <a href="/custom-order" onClick={(e) => linkNavbar(e, "customorder")}>
-                Custom Order {links.customorder && <div className="main-line-under"></div>}
-              </a>
+
               {!user && (
                 <a href="/login" onClick={(e) => linkNavbar(e, "login")}>
                   Login {links.login && <div className="main-line-under"></div>}
