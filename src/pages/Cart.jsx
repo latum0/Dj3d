@@ -115,10 +115,10 @@ const Cart = () => {
     0
   );
   const tax = subTotal * 0.2;
-  const shipping = subTotal > 500 ? 0 : 9.99;
+  const shipping = subTotal > 500 ? 0 : 99.99;
   const total = subTotal + tax + shipping - discount;
   const formatPrice = (price) =>
-    price.toFixed(2).replace(".", ",") + " €";
+    price.toFixed(2).replace(".", ",") + " DA";
 
   if (loading) {
     return (
@@ -268,14 +268,7 @@ const Cart = () => {
                 Passer la commande
               </button>
 
-              <div className="payment-methods">
-                <p>Méthodes de paiement acceptées:</p>
-                <div className="payment-icons">
-                  <div className="payment-icon visa">VISA</div>
-                  <div className="payment-icon mastercard"></div>
-                  <div className="payment-icon paypal">PayPal</div>
-                </div>
-              </div>
+
             </div>
           </div>
         )}

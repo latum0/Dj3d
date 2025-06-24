@@ -292,7 +292,7 @@ export default function OrderAddingModal({
                                                     </option>
                                                     {productOptions.map((p) => (
                                                         <option key={p._id} value={p._id}>
-                                                            {p.name} (€{p.price.toFixed(2)})
+                                                            {p.name} ({p.price.toFixed(2)} DA)
                                                         </option>
                                                     ))}
                                                 </select>
@@ -312,7 +312,7 @@ export default function OrderAddingModal({
                                                 />
                                             </div>
                                             <div className="orders-management-form-group">
-                                                <label className="orders-management-form-label">Prix unitaire (€) *</label>
+                                                <label className="orders-management-form-label">Prix unitaire (DA) *</label>
                                                 <input
                                                     type="number"
                                                     step="0.01"
@@ -369,7 +369,7 @@ export default function OrderAddingModal({
 
                                         </div>
                                         <div className="orders-management-item-total">
-                                            Total: €
+                                            Total: DA
                                             {(item.priceAtPurchase * item.quantity).toFixed(2)}
                                         </div>
                                     </div>
@@ -487,7 +487,7 @@ export default function OrderAddingModal({
                                 <div className="orders-management-financial-summary">
                                     <div className="orders-management-summary-row">
                                         <span>Total des articles:</span>
-                                        <span className="orders-management-summary-amount">€{calculateTotal().toFixed(2)}</span>
+                                        <span className="orders-management-summary-amount">{calculateTotal().toFixed(2)} DA</span>
                                     </div>
                                     <div className="orders-management-summary-row orders-management-summary-total">
                                         <span>Total de la commande:</span>

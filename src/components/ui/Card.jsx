@@ -90,7 +90,7 @@ function Card({ id, name, price, img, star, rating }) {
         <div className="description-section">
           <p className="product-title">{name}</p>
           <div className="price-info">
-            <p className="price-label">${price}</p>
+            <p className="price-label">{price} DA</p>
             <div className="rating-wrapper">
               <StarEx rating={star} />
               <span>({rating})</span>

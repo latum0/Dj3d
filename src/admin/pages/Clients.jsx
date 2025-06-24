@@ -403,7 +403,7 @@ function Clients() {
                   <div className="client-phone">{client.phone || 'N/A'}</div>
                 </td>
                 <td>0</td>
-                <td>€0.00</td>
+                <td>0.00 DA</td>
                 <td>
                   <span
                     className="status-badge"
@@ -512,7 +512,7 @@ function Clients() {
                 </div>
                 <div className="detail-row">
                   <span className="detail-label">Dépenses totales:</span>
-                  <span className="detail-value">€0.00</span>
+                  <span className="detail-value">0.00 DA</span>
                 </div>
               </div>
             </div>

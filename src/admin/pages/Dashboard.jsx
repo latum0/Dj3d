@@ -34,7 +34,7 @@ function Dashboard() {
           <div className="stat-header">
             <div>
               <p className="stat-title">Ventes totales</p>
-              <p className="stat-value">€24,532</p>
+              <p className="stat-value">24,532 DA</p>
             </div>
             <div className="stat-icon">
               <ShoppingCart size={20} />
@@ -82,7 +82,7 @@ function Dashboard() {
           <div className="stat-header">
             <div>
               <p className="stat-title">Paiements vendeurs</p>
-              <p className="stat-value">€12,234</p>
+              <p className="stat-value">12,234 DA</p>
             </div>
             <div className="stat-icon">
               <CreditCard size={20} />
@@ -116,7 +116,7 @@ function Dashboard() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="total" fill="#8884d8" name="Revenus (€)" />
+                <Bar dataKey="total" fill="#8884d8" name="Revenus (DA)" />
               </BarChart>
             </ResponsiveContainer>
           </div>

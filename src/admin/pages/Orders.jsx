@@ -284,8 +284,9 @@ function Orders() {
                       </td>
                       <td>
                         <div className="orders-management-amount-info">
-                          <span className="orders-management-currency">€</span>
-                          <span className="orders-management-amount">{(order.totalAmount || 0).toFixed(2)}</span>
+
+                          <span className="orders-management-amount">{(order.totalAmount || 0).toFixed(2)} </span>
+                          <span className="orders-management-currency">DA</span>
                         </div>
                       </td>
                       <td>

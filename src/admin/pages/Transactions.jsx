@@ -82,7 +82,7 @@ function Transactions() {
       'ID': t.reference,
       'Type': t.amount > 0 ? 'Vente' : t.method === 'Refund' ? 'Remboursement' : 'Paiement vendeur',
       'Description': t.description,
-      'Montant (€)': t.amount,
+      'Montant (DA)': t.amount,
       'Statut': t.status === 'Completed' ? 'Réussie' : t.status === 'Pending' ? 'En attente' : 'Échouée',
       'Date': new Date(t.transactionDate).toLocaleString(),
       'Client/Vendeur': t.vendor.name
@@ -102,7 +102,7 @@ function Transactions() {
       t.reference,
       t.amount > 0 ? 'Vente' : t.method === 'Refund' ? 'Remboursement' : 'Paiement vendeur',
       t.description || 'N/A',
-      `${t.amount >= 0 ? '+' : '-'}€${Math.abs(t.amount).toFixed(2)}`,
+      `${t.amount >= 0 ? '+' : '-'}${Math.abs(t.amount).toFixed(2)} DA`,
       t.status === 'Completed' ? 'Réussie' : t.status === 'Pending' ? 'En attente' : 'Échouée',
       new Date(t.transactionDate).toLocaleDateString(),
       t.vendor.name
@@ -157,7 +157,7 @@ function Transactions() {
               <td>{t.reference}</td>
               <td>{t.amount > 0 ? 'Vente' : t.method === 'Refund' ? 'Remboursement' : 'Paiement vendeur'}</td>
               <td>{t.description}</td>
-              <td>{t.amount >= 0 ? '+' : '-'}€{Math.abs(t.amount).toFixed(2)}</td>
+              <td>{t.amount >= 0 ? '+' : '-'}{Math.abs(t.amount).toFixed(2)} DA</td>
               <td>{t.status === 'Completed' ? 'Réussie' : t.status === 'Pending' ? 'En attente' : 'Échouée'}</td>
               <td>{new Date(t.transactionDate).toLocaleString()}</td>
               <td>{t.vendor.name}</td>

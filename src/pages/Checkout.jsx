@@ -1,16 +1,19 @@
 // src/pages/Checkout.jsx
 "use client"
 
-import { useState } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
 import "./Checkout.css"
 
 const Checkout = () => {
-  const location = useLocation()
   const navigate = useNavigate()
-  const { cartItems = [], total = 0 } = location.state || {}
   const { user, guestId } = useAuth()
+
+  // pull cart from backend so we can read any existing customName
+  const [cartItems, setCartItems] = useState([])
+  const [total, setTotal] = useState(0)
+  const [loadingCart, setLoadingCart] = useState(true)
 
   const [formData, setFormData] = useState({
     name: "",
@@ -26,7 +29,54 @@ const Checkout = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState(null)
 
-  if (!location.state || cartItems.length === 0) {
+  // fetch the cart document on mount
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        const token = localStorage.getItem("token")
+        const headers = {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        }
+        const res = await fetch(
+          "http://localhost:5000/api/cart",
+          {
+            method: "GET",
+            headers,
+            credentials: "include",
+          }
+        )
+        const data = await res.json()
+        if (!res.ok) throw new Error(data.error || "Erreur chargement panier")
+        const items = data.cartItems || data.items || []
+        setCartItems(items)
+        setTotal(data.total ?? 0)
+        // if the cart item already has a customName, prefill it
+        const initialNames = {}
+        items.forEach((item, idx) => {
+          if (item.customName) {
+            initialNames[idx] = item.customName
+          }
+        })
+        setCustomNames(initialNames)
+      } catch (err) {
+        console.error(err)
+      } finally {
+        setLoadingCart(false)
+      }
+    }
+    fetchCart()
+  }, [])
+
+  if (loadingCart) {
+    return (
+      <div className="checkout-page">
+        <p>Chargement du panier…</p>
+      </div>
+    )
+  }
+
+  if (cartItems.length === 0) {
     return (
       <div className="checkout-page">
         <div className="empty-cart-warning">
@@ -37,28 +87,28 @@ const Checkout = () => {
     )
   }
 
-  // 1. Detect if any cart item’s category requires a custom name
+  // do any item require a customName at all?
   const requiresCustom = cartItems.some(
     (item) => item.product?.category?.customNameAllowed
   )
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: type === "checkbox" ? checked : value,
-    })
+    }))
   }
 
-  const handleCustomNameChange = (itemIndex, value) => {
-    setCustomNames({
-      ...customNames,
-      [itemIndex]: value,
-    })
+  const handleCustomNameChange = (idx, value) => {
+    setCustomNames((prev) => ({
+      ...prev,
+      [idx]: value,
+    }))
   }
 
   const handlePaymentMethodChange = (method) => {
-    setFormData({ ...formData, paymentMethod: method })
+    setFormData((prev) => ({ ...prev, paymentMethod: method }))
   }
 
   const handleCardSelection = (card) => {
@@ -69,7 +119,7 @@ const Checkout = () => {
     e.preventDefault()
     setError(null)
 
-    // 2. Prevent submission if a required custom name is missing
+    // block if any required customName is still blank
     if (requiresCustom) {
       const missing = cartItems.filter(
         (item, idx) =>
@@ -102,12 +152,11 @@ const Checkout = () => {
         items: orderItems,
         paymentMethod:
           formData.paymentMethod === "card"
-            ? "CreditCard"
+            ? "CarteEdahabia"
             : "CashOnDelivery",
         shippingInfo: {
           city: formData.city,
           phone: formData.phoneNumber,
-          // always include an email address (logged-in users or guest)
           email: user?.email || formData.email,
         },
         ...(!user && {
@@ -235,14 +284,12 @@ const Checkout = () => {
                     nécessitent
                   </p>
                   {cartItems.map((item, index) => {
-                    const allowed =
-                      item.product?.category?.customNameAllowed
+                    const allowed = item.product?.category?.customNameAllowed
                     if (!allowed) return null
+                    // skip input if cart item already has customName
+                    if (item.customName) return null
                     return (
-                      <div
-                        key={index}
-                        className="custom-name-group"
-                      >
+                      <div key={index} className="custom-name-group">
                         <div className="product-info">
                           <span className="product-name">
                             {item.product?.name || "Produit"}
@@ -252,21 +299,15 @@ const Checkout = () => {
                           </span>
                         </div>
                         <div className="form-group">
-                          <label
-                            htmlFor={`customName-${index}`}
-                          >
-                            Nom personnalisé{" "}
-                            <span className="required">*</span>
+                          <label htmlFor={`customName-${index}`}>
+                            Nom personnalisé <span className="required">*</span>
                           </label>
                           <input
                             type="text"
                             id={`customName-${index}`}
                             value={customNames[index] || ""}
-                            onChange={(e) =>
-                              handleCustomNameChange(
-                                index,
-                                e.target.value
-                              )
+                            onChange={e =>
+                              handleCustomNameChange(index, e.target.value)
                             }
                             required
                             placeholder="Entrez un nom personnalisé"
@@ -279,9 +320,9 @@ const Checkout = () => {
                 </div>
               )}
 
+              {/* rest unchanged… */}
               <div className="form-section">
                 <h2 className="section-title">Méthode de paiement</h2>
-                {/* …payment inputs unchanged… */}
                 <div className="payment-options">
                   <div className="payment-option">
                     <div className="payment-radio">
@@ -296,14 +337,10 @@ const Checkout = () => {
                       />
                       <label htmlFor="card-payment">
                         <span className="payment-icon">💳</span>
-                        Carte bancaire
+                        Carte Edahabia
                       </label>
                     </div>
-                    {formData.paymentMethod === "card" && (
-                      <div className="card-selection">
-                        {/* …card buttons unchanged… */}
-                      </div>
-                    )}
+
                   </div>
                   <div className="payment-option">
                     <div className="payment-radio">
@@ -346,9 +383,12 @@ const Checkout = () => {
           </div>
 
 
-          <div className="order-summary">
+
+
+
+          < div className="order-summary" >
             {/* …summary unchanged… */}
-            <h2 className="summary-title">Récapitulatif de commande</h2>
+            < h2 className="summary-title" > Récapitulatif de commande</h2 >
             <div className="cart-items">
               {cartItems.map((item, index) => (
                 <div key={index} className="cart-item">
@@ -371,7 +411,7 @@ const Checkout = () => {
                         item.priceAtPurchase ||
                         0) * item.quantity
                     ).toFixed(2)}{" "}
-                    €
+                    DA
                   </span>
                 </div>
               ))}
@@ -395,7 +435,7 @@ const Checkout = () => {
               <div className="summary-item">
                 <span>Sous-total:</span>
                 <span className="summary-value">
-                  {total.toFixed(2)} €
+                  {total.toFixed(2)} DA
                 </span>
               </div>
               <div className="summary-item">
@@ -407,7 +447,7 @@ const Checkout = () => {
               <div className="summary-item total">
                 <span>Total:</span>
                 <span className="summary-value">
-                  {total.toFixed(2)} €
+                  {total.toFixed(2)} DA
                 </span>
               </div>
             </div>
@@ -416,10 +456,10 @@ const Checkout = () => {
               <span className="security-icon">🔒</span>
               <span>Paiement 100% sécurisé</span>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </div >
+        </div >
+      </div >
+    </div >
   )
 }
 

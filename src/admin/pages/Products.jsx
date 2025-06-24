@@ -298,7 +298,7 @@ function Products() {
                 <h3 className="products-management-card-name">{product.name}</h3>
                 <p className="products-management-card-description">{product.description}</p>
                 <div className="products-management-card-meta">
-                  <span className="products-management-card-price">{product.price?.toFixed(2)}€</span>
+                  <span className="products-management-card-price">{product.price?.toFixed(2)}DA</span>
                   <span className="products-management-card-category">{getCategoryName(product.category)}</span>
                 </div>
               </div>
@@ -343,7 +343,7 @@ function Products() {
                       <div className="products-management-list-description">{product.description}</div>
                     </td>
                     <td>
-                      <div className="products-management-list-price">{product.price?.toFixed(2)}€</div>
+                      <div className="products-management-list-price">{product.price?.toFixed(2)}DA</div>
                     </td>
                     <td>
                       <span className="products-management-list-category">{getCategoryName(product.category)}</span>

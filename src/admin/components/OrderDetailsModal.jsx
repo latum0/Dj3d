@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import axios from "axios"
-
 function OrderDetailsModal({ show, order, onClose, onOrderUpdate, onError, getBadgeClass, frDate }) {
     const [newStatus, setNewStatus] = useState("")
     const [isUpdatingStatus, setIsUpdatingStatus] = useState(false)
@@ -21,15 +20,13 @@ function OrderDetailsModal({ show, order, onClose, onOrderUpdate, onError, getBa
         setIsUpdatingStatus(true)
         try {
             const token = localStorage.getItem("token")
-            const response = await axios.put(
+            await axios.put(
                 `http://localhost:5000/api/orders/${order._id}/status`,
                 { status: newStatus },
                 { headers: { Authorization: `Bearer ${token}` } },
             )
 
-            const updatedOrder = { ...order, status: newStatus }
-            onOrderUpdate(updatedOrder)
-
+            onOrderUpdate({ ...order, status: newStatus })
             setStatusUpdateSuccess(true)
             setTimeout(() => setStatusUpdateSuccess(false), 3000)
         } catch (err) {
@@ -41,7 +38,7 @@ function OrderDetailsModal({ show, order, onClose, onOrderUpdate, onError, getBa
     }
 
     if (!show || !order) return null
-
+    const isCustomOrder = order.items?.some(item => !!item.customImage)
     return (
         <div className="orders-management-modal-overlay">
             <div className="orders-management-modal orders-management-modern-modal">
@@ -176,17 +173,7 @@ function OrderDetailsModal({ show, order, onClose, onOrderUpdate, onError, getBa
                             {/* Address Information */}
                             {(order.guestDetails?.address || order.shippingInfo) && (
                                 <>
-                                    <h5 className="orders-management-subsection-title">Adresse de facturation</h5>
-                                    <div className="orders-management-address-info">
-                                        <p>
-                                            {order.guestDetails?.address?.street || "123 Rue de la Paix"}
-                                            <br />
-                                            {order.guestDetails?.address?.city || "Paris"},{" "}
-                                            {order.guestDetails?.address?.postalCode || "75001"}
-                                            <br />
-                                            {order.guestDetails?.address?.country || "France"}
-                                        </p>
-                                    </div>
+
 
                                     <h5 className="orders-management-subsection-title">Adresse de livraison</h5>
                                     <div className="orders-management-address-info">
@@ -195,7 +182,7 @@ function OrderDetailsModal({ show, order, onClose, onOrderUpdate, onError, getBa
                                             <br />
                                             {order.shippingInfo?.city || "Paris"}, {order.shippingInfo?.postalCode || "75001"}
                                             <br />
-                                            {order.shippingInfo?.country || "France"}
+
                                         </p>
                                         {order.shippingInfo?.phone && (
                                             <p>
@@ -216,6 +203,7 @@ function OrderDetailsModal({ show, order, onClose, onOrderUpdate, onError, getBa
                                 <table className="orders-management-items-table">
                                     <thead>
                                         <tr>
+                                            {isCustomOrder && <th>Image</th>}
                                             <th>Produit</th>
                                             <th>Qté</th>
                                             <th>Prix</th>
@@ -226,15 +214,29 @@ function OrderDetailsModal({ show, order, onClose, onOrderUpdate, onError, getBa
                                     <tbody>
                                         {order.items?.map((item, i) => (
                                             <tr key={i}>
+                                                {isCustomOrder && (
+                                                    <td className="orders-management-item-image">
+                                                        {item.customImage ? (
+                                                            <a href={item.customImage} download target="_blank" rel="noopener noreferrer">
+                                                                <img
+                                                                    src={item.customImage}
+                                                                    alt="Custom"
+                                                                    style={{ maxWidth: 80, maxHeight: 80, cursor: 'pointer' }}
+                                                                />
+                                                            </a>
+                                                        ) : (
+                                                            <span>—</span>
+                                                        )}
+                                                    </td>)}
                                                 <td className="orders-management-item-name">
                                                     {item.product?.name || item.product || "Produit inconnu"}
                                                 </td>
                                                 <td className="orders-management-item-qty">{item.quantity}</td>
                                                 <td className="orders-management-item-price">
-                                                    €{(item.priceAtPurchase ?? item.product?.price ?? 0).toFixed(2)}
+                                                    {(item.priceAtPurchase ?? item.product?.price ?? 0).toFixed(2)} DA
                                                 </td>
                                                 <td className="orders-management-item-total">
-                                                    €{((item.priceAtPurchase ?? item.product?.price ?? 0) * item.quantity).toFixed(2)}
+                                                    {((item.priceAtPurchase ?? item.product?.price ?? 0) * item.quantity).toFixed(2)} DA
                                                 </td>
                                                 <td className="orders-management-item-options">
                                                     {item.size && <span className="orders-management-option-tag">Taille: {item.size}</span>}
@@ -258,15 +260,15 @@ function OrderDetailsModal({ show, order, onClose, onOrderUpdate, onError, getBa
                             <div className="orders-management-summary-list">
                                 <div className="orders-management-summary-item">
                                     <span>Sous-total:</span>
-                                    <span>€{order.subTotal?.toFixed(2) || order.totalAmount?.toFixed(2) || "0.00"}</span>
+                                    <span>{order.subTotal?.toFixed(2) || order.totalAmount?.toFixed(2) || "0.00"} DA</span>
                                 </div>
                                 <div className="orders-management-summary-item">
                                     <span>Frais de livraison:</span>
-                                    <span>€{order.shippingPrice?.toFixed(2) || "0.00"}</span>
+                                    <span>{order.shippingPrice?.toFixed(2) || "0.00"} DA</span>
                                 </div>
                                 <div className="orders-management-summary-item total">
                                     <span>Total:</span>
-                                    <span>€{order.totalAmount?.toFixed(2) || "0.00"}</span>
+                                    <span>{order.totalAmount?.toFixed(2) || "0.00"} DA</span>
                                 </div>
                             </div>
                         </section>

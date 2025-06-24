@@ -188,7 +188,7 @@ function VendorPayments() {
               </div>
 
               <div className="form-group">
-                <label htmlFor="amount">Montant (€)</label>
+                <label htmlFor="amount">Montant (DA)</label>
                 <input
                   id="amount"
                   type="number"
