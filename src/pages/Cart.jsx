@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Trash2, Plus, Minus, ArrowLeft, ShoppingBag } from "lucide-react";
+import { ShoppingBag, Trash2, Minus, Plus, ArrowLeft } from "lucide-react";
 import "./Cart.css";
 
 const Cart = () => {
@@ -92,7 +92,7 @@ const Cart = () => {
   };
 
   const clearCart = async () => {
-    if (!window.confirm("Êtes-vous sûr de vouloir vider votre panier ?")) return;
+    if (!window.confirm("êtes-vous sûr de vouloir vider votre panier ?")) return;
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(`${API_BASE}/cart/clear`, {
@@ -103,17 +103,22 @@ const Cart = () => {
         },
         credentials: "include",
       });
-      if (!response.ok) throw new Error("Échec lors du vidage du panier");
-      setCart({ items: [] });
+      if (!response.ok) throw new Error("Failed to clear cart");
+      const updated = await response.json();
+      setCart(updated ?? { items: [] });
     } catch (error) {
       console.error("Clear cart error:", error);
     }
   };
 
-  // Safe defaults
   const items = Array.isArray(cart.items) ? cart.items : [];
   const subTotal = items.reduce(
-    (sum, item) => sum + (item?.product?.price ?? 0) * (item?.quantity ?? 0),
+    (sum, item) =>
+      sum +
+      ((item?.product && typeof item.product.price === "number"
+        ? item.product.price
+        : 0) *
+        (item?.quantity ?? 0)),
     0
   );
   const tax = subTotal * 0.2;
@@ -131,7 +136,6 @@ const Cart = () => {
       </div>
     );
   }
-
 
   return (
     <div className="cart-page">
@@ -152,7 +156,9 @@ const Cart = () => {
             </div>
             <h2>Votre panier est vide</h2>
             <p>Vous n'avez pas encore ajouté d'articles à votre panier.</p>
-            <button onClick={() => navigate("/")} className="continue-shopping">Commencer vos achats</button>
+            <button onClick={() => navigate("/")} className="continue-shopping">
+              Commencer vos achats
+            </button>
           </div>
         ) : (
           <div className="cart-content">
@@ -163,54 +169,79 @@ const Cart = () => {
                 <span className="price-header">Prix</span>
               </div>
 
-              {cart.items.map((item) => (
-                <div className="cart-item" key={item.product._id}>
-                  <div className="item-info">
-                    <div className="item-image">
-                      <img
-                        src={item.product?.image?.[0] || "/placeholder.svg"}
-                        alt={item.product?.name || "Produit"}
-                      />
+              {cart.items.map(
+                (item) =>
+                  item &&
+                  item.product && (
+                    <div className="cart-item" key={item.product._id}>
+                      <div className="item-info">
+                        <div className="item-image">
+                          <img
+                            src={item.product?.image?.[0] || "/placeholder.svg"}
+                            alt={item.product?.name || "Produit"}
+                          />
+                        </div>
+                        <div className="item-details">
+                          <h3 className="item-name">{item.product?.name}</h3>
+                          <button
+                            className="remove-item"
+                            onClick={() => removeItem(item.product._id)}
+                          >
+                            <Trash2 size={16} />
+                            Supprimer
+                          </button>
+                        </div>
+                      </div>
+                      <div className="item-quantity">
+                        <button
+                          className="quantity-btn decrease"
+                          onClick={() =>
+                            updateQuantity(item.product._id, item.quantity - 1)
+                          }
+                          disabled={item.quantity <= 1}
+                        >
+                          <Minus size={16} />
+                        </button>
+                        <span className="quantity-value">{item.quantity}</span>
+                        <button
+                          className="quantity-btn increase"
+                          onClick={() =>
+                            updateQuantity(item.product._id, item.quantity + 1)
+                          }
+                        >
+                          <Plus size={16} />
+                        </button>
+                      </div>
+                      <div className="item-price">
+                        <span className="price-value">
+                          {formatPrice(
+                            (typeof item.product.price === "number"
+                              ? item.product.price
+                              : 0) * (item.quantity ?? 0)
+                          )}
+                        </span>
+                        <span className="unit-price">
+                          {formatPrice(
+                            typeof item.product.price === "number"
+                              ? item.product.price
+                              : 0
+                          )}{" "}
+                          / unité
+                        </span>
+                      </div>
                     </div>
-                    <div className="item-details">
-                      <h3 className="item-name">{item.product?.name}</h3>
-                      <button className="remove-item" onClick={() => removeItem(item.product._id)}>
-                        <Trash2 size={16} />
-                        Supprimer
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="item-quantity">
-                    <button
-                      className="quantity-btn decrease"
-                      onClick={() => updateQuantity(item.product._id, item.quantity - 1)}
-                      disabled={item.quantity <= 1}
-                    >
-                      <Minus size={16} />
-                    </button>
-                    <span className="quantity-value">{item.quantity}</span>
-                    <button
-                      className="quantity-btn increase"
-                      onClick={() => updateQuantity(item.product._id, item.quantity + 1)}
-                    >
-                      <Plus size={16} />
-                    </button>
-                  </div>
-
-                  <div className="item-price">
-                    <span className="price-value">{formatPrice(item.product.price * item.quantity)}</span>
-                    <span className="unit-price">{formatPrice(item.product.price)} / unité</span>
-                  </div>
-                </div>
-              ))}
+                  )
+              )}
 
               <div className="cart-actions">
                 <button className="clear-cart" onClick={clearCart}>
                   <Trash2 size={16} />
                   Vider le panier
                 </button>
-                <button className="continue-shopping" onClick={() => navigate("/")}>
+                <button
+                  className="continue-shopping"
+                  onClick={() => navigate("/")}
+                >
                   <ArrowLeft size={16} />
                   Continuer vos achats
                 </button>
@@ -219,7 +250,6 @@ const Cart = () => {
 
             <div className="cart-summary">
               <h2>Récapitulatif</h2>
-
               <div className="promo-code">
                 <input
                   type="text"
@@ -228,22 +258,19 @@ const Cart = () => {
                   onChange={(e) => setPromoCode(e.target.value)}
                   disabled={promoApplied}
                 />
-                <button className="apply-promo" onClick={applyPromoCode} disabled={promoApplied || !promoCode}>
+                <button
+                  className="apply-promo"
+                  onClick={applyPromoCode}
+                  disabled={promoApplied || !promoCode}
+                >
                   Appliquer
                 </button>
               </div>
-
               <div className="summary-details">
                 <div className="summary-row">
                   <span>Sous-total</span>
                   <span>{formatPrice(subTotal)}</span>
                 </div>
-                {discount > 0 && (
-                  <div className="summary-row discount">
-                    <span>Réduction</span>
-                    <span>-{formatPrice(discount)}</span>
-                  </div>
-                )}
                 <div className="summary-row">
                   <span>TVA (20%)</span>
                   <span>{formatPrice(tax)}</span>
@@ -252,31 +279,27 @@ const Cart = () => {
                   <span>Livraison</span>
                   <span>{shipping === 0 ? "Gratuite" : formatPrice(shipping)}</span>
                 </div>
-                <div className="summary-row total">
+                <div className="summary-row discount-row">
+                  <span>Remise</span>
+                  <span>-{formatPrice(discount)}</span>
+                </div>
+                <div className="summary-row total-row">
                   <span>Total</span>
                   <span>{formatPrice(total)}</span>
                 </div>
               </div>
-
               <button
-                className="checkout-button"
-                onClick={() => navigate("/Checkout", {
-                  state: {
-                    cartItems: cart.items,
-                    total: total // Ajouter le total ici
-                  }
-                })}
+                className="checkout-btn"
+                onClick={() => navigate("/checkout")}
               >
-                Passer la commande
+                Passer à la caisse
               </button>
-
-
             </div>
           </div>
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Cart
+export default Cart;
