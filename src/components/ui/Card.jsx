@@ -1,3 +1,4 @@
+// src/components/Card.jsx
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import "./Card.css";
@@ -5,20 +6,22 @@ import StarEx from "./starEx";
 import { MdFavoriteBorder } from "react-icons/md";
 import { useAuth } from "../../context/AuthContext";
 
-
-
 function Card({ id, name, price, img, star, rating }) {
   const { user } = useAuth();
   const [isLiked, setIsLiked] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
 
-  // Fetch cart and update isAdded
+  // Grab API URL from env and strip trailing slash
+  const RAW_API = import.meta.env.VITE_API_URL || "";
+  const API_BASE = RAW_API.replace(/\/$/, "");
+
+  // Fetch cart items to determine if this product is already added
   const fetchCart = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("api/cart", {
+      const res = await fetch(`${API_BASE}/cart`, {
         method: "GET",
-        credentials: "include",           // ← send guestId cookie
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           ...(token && { Authorization: `Bearer ${token}` }),
@@ -28,28 +31,27 @@ function Card({ id, name, price, img, star, rating }) {
       const cart = await res.json();
       const added =
         Array.isArray(cart.items) &&
-        cart.items.some(
-          (item) => item.product._id.toString() === id.toString()
-        );
+        cart.items.some(item => item.product._id.toString() === id);
       setIsAdded(added);
     } catch (err) {
       console.error("Error fetching cart:", err);
     }
-  }, [id]);
+  }, [API_BASE, id]);
 
   useEffect(() => {
     fetchCart();
   }, [fetchCart, user]);
 
-  const handleAddToCart = async (e) => {
+  // Handle “Add to Cart” click
+  const handleAddToCart = async e => {
     e.preventDefault();
     e.stopPropagation();
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("api/cart", {
+      const res = await fetch(`${API_BASE}/cart`, {
         method: "POST",
-        credentials: "include",           // ← include guestId or auth cookie
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           ...(token && { Authorization: `Bearer ${token}` }),
@@ -57,10 +59,9 @@ function Card({ id, name, price, img, star, rating }) {
         body: JSON.stringify({ productId: id, quantity: 1 }),
       });
       if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || err.message || "Failed to add to cart");
+        const errBody = await res.json().catch(() => ({}));
+        throw new Error(errBody.error || errBody.message || "Failed to add to cart");
       }
-      // Immediately update UI
       setIsAdded(true);
     } catch (err) {
       console.error("Add to cart error:", err);
@@ -68,9 +69,9 @@ function Card({ id, name, price, img, star, rating }) {
     }
   };
 
-  const handleLike = (e) => {
+  const handleLike = e => {
     e.preventDefault();
-    setIsLiked((v) => !v);
+    setIsLiked(v => !v);
   };
 
   return (
