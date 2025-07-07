@@ -4,7 +4,7 @@ import App from './App';
 import { initGuestId } from './utils/guest';
 import { AuthProvider } from './context/AuthContext';
 
-initGuestId();
+
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
