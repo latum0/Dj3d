@@ -23,29 +23,27 @@ export default function About() {
 
             <section className="about-section">
                 <div className="about-content">
-                    <h1 className="about-title">NeoPrinting</h1>
-                    <p>
-                        At NeoPrinting, we believe that customized products should be accessible, affordable, and locally made.
-                    </p>
-                    <p>
-                        Our journey began with a simple observation: many Algerians struggle to find spare parts or custom-made items for everyday needs — often forced to import or abandon perfectly usable devices.
-                    </p>
-                    <p>
-                        We saw this as more than just a market gap — we saw it as an opportunity to empower local manufacturing using 3D printing.
-                    </p>
-                    <p>
-                        That’s why we created NeoPrinting:
-                        A 3D printing farm connected to a smart e-commerce platform where:
-                    </p>
-                    <p>
-                        Customers can order ready-made products or upload their own ideas
-
-                        Every item is printed on demand, locally
-
-                        We're a team of passionate students, makers, and problem-solvers who believe that digital manufacturing can change the way people access products — one print at a time.
-
-                        Welcome to the future of local, on-demand production.
-                    </p>
+                    <h1 className="about-title">our story</h1>
+                    <section className="neo-printing-story space-y-4 p-6">
+                        <p>
+                            At NeoPrinting, we believe that customized products should be accessible, affordable, and locally made.
+                        </p>
+                        <p>
+                            Our journey began with a simple observation: many Algerians struggle to find spare parts or custom-made items for everyday needs — often forced to import or abandon perfectly usable devices.
+                        </p>
+                        <p>
+                            We saw this as more than just a market gap — we saw it as an opportunity to empower local manufacturing using 3D printing.
+                        </p>
+                        <p>
+                            That’s why we created NeoPrinting: a 3D printing farm connected to a smart e-commerce platform where:
+                        </p>
+                        <div className="space-y-1 pl-4">
+                            <p>• Customers can order ready-made products or upload their own ideas</p>
+                            <p>• Every item is printed on demand, locally</p>
+                            <p>• We're a team of passionate students, makers, and problem-solvers who believe that digital manufacturing can change the way people access products — one print at a time.</p>
+                            <p>• Welcome to the future of local, on-demand production.</p>
+                        </div>
+                    </section>
                 </div>
 
                 <div className="about-image-container">
