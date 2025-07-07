@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import "./orders.css"
+import "./Orders.css"
 import axios from "axios"
 import OrderDetailsModal from "../components/OrderDetailsModal"
 import OrderAddingModal from "../components/OrderAddingModal"
