@@ -15,6 +15,7 @@ function CategoryManagement() {
     const RAW_API = import.meta.env.VITE_API_URL || "";
     const API_BASE = RAW_API.replace(/\/$/, "");
 
+
     const [formData, setFormData] = useState({
         name: "",
         isActive: true,
@@ -29,7 +30,7 @@ function CategoryManagement() {
         try {
             const token = localStorage.getItem("token")
             const response = await axios.get(
-                `${API_BASE}/api/categories`, // <-- note the “http://”
+                `${API_BASE}/categories`, // <-- note the “http://”
                 { headers: { Authorization: `Bearer ${token}` } }
             )
             setCategories(response.data.data || response.data)
@@ -68,7 +69,7 @@ function CategoryManagement() {
                     headers: { Authorization: `Bearer ${token}` },
                 })
             } else {
-                await axios.post(`${API_BASE}/api/categories`, formData, {
+                await axios.post(`${API_BASE}/categories`, formData, {
                     headers: { Authorization: `Bearer ${token}` },
                 })
             }
