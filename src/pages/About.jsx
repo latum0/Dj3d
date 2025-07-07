@@ -23,12 +23,28 @@ export default function About() {
 
             <section className="about-section">
                 <div className="about-content">
-                    <h1 className="about-title">Our Story</h1>
+                    <h1 className="about-title">NeoPrinting</h1>
                     <p>
-                        Launched in 2025, Skill Market is the first e-commerce platform specialized in PC equipment with an active presence across Africa. Powered by advanced customization and recommendation technologies, Skill Market offers over 15,000 products from 500 different brands and serves more than 2 million tech and gaming enthusiasts.
+                        At NeoPrinting, we believe that customized products should be accessible, affordable, and locally made.
                     </p>
                     <p>
-                        Skill Market offers a diverse range of products covering all computing needs—from high-performance components to gaming peripherals—constantly evolving to keep up with the latest innovations. Our platform allows users to customize PCs, compare technical specifications, and benefit from expert advice to optimize their purchases across all categories, from graphics cards to advanced cooling systems.
+                        Our journey began with a simple observation: many Algerians struggle to find spare parts or custom-made items for everyday needs — often forced to import or abandon perfectly usable devices.
+                    </p>
+                    <p>
+                        We saw this as more than just a market gap — we saw it as an opportunity to empower local manufacturing using 3D printing.
+                    </p>
+                    <p>
+                        That’s why we created NeoPrinting:
+                        A 3D printing farm connected to a smart e-commerce platform where:
+                    </p>
+                    <p>
+                        Customers can order ready-made products or upload their own ideas
+
+                        Every item is printed on demand, locally
+
+                        We're a team of passionate students, makers, and problem-solvers who believe that digital manufacturing can change the way people access products — one print at a time.
+
+                        Welcome to the future of local, on-demand production.
                     </p>
                 </div>
 
@@ -64,26 +80,7 @@ export default function About() {
                 </div>
             </section>
 
-            <section className="team-section">
-                <h2 className="section-title">Our Team</h2>
-                <div className="team-grid">
-                    <div className="team-member">
-                        <img src={tom} alt="Tom Cruise" className="member-photo" />
-                        <h3>Tom Cruise</h3>
-                        <p>Founder & Chairman</p>
-                    </div>
-                    <div className="team-member">
-                        <img src={emma} alt="Emma Watson" className="member-photo" />
-                        <h3>Emma Watson</h3>
-                        <p>Managing Director</p>
-                    </div>
-                    <div className="team-member">
-                        <img src={will} alt="Will Smith" className="member-photo" />
-                        <h3>Will Smith</h3>
-                        <p>Product Designer</p>
-                    </div>
-                </div>
-            </section>
+
 
             <div className="carousel-indicators">
                 {['indicator-1', 'indicator-2', 'indicator-3', 'indicator-4', 'indicator-5'].map((id, index) => (
