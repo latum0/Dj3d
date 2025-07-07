@@ -34,7 +34,7 @@ function VendorPayments() {
   }
 
   // Lecture de l'URL de l'API
-  const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  const API_BASE = "/api";
 
   // Instance axios configurée
   const api = axios.create({

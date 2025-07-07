@@ -14,7 +14,7 @@ function Sidebar() {
     try {
       // send the HTTP-only cookie with the request
       await axios.post(
-        "http://localhost:5000/api/auth/logout",
+        "/api/auth/logout",
         {},
         { withCredentials: true }
       );

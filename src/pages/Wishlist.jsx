@@ -116,9 +116,9 @@ const Wishlist = () => {
   return (
     <div className="exclusive-shop">
       {/* Announcement Bar */}
-      
 
-      
+
+
 
       {/* Main Content */}
       <main className="main-content">
@@ -137,7 +137,7 @@ const Wishlist = () => {
             <h2>Just For You</h2>
           </div>
           <button className="move-all-btn">See All</button>
-          
+
         </div>
 
         <div className="product-grid">

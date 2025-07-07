@@ -77,7 +77,7 @@ const Header = () => {
     }
     try {
       const res = await fetch(
-        `http://localhost:5000/api/products/search?q=${encodeURIComponent(
+        `/apiproducts/search?q=${encodeURIComponent(
           t
         )}`
       );
@@ -120,16 +120,16 @@ const Header = () => {
     <div className="main-nav-container">
       <div className="main-navbar-wrapper">
         <header className="main-navbar">
-          {/* Logo */}
+
           <div className="main-navbar-logo" onClick={() => navigate("/")}>
             <img
-              src="/src/assets/logoBlue.png"
+              src="/src/assets/logoNeo.png"
               alt="Logo"
               className="main-logo-img"
             />
           </div>
 
-          {/* Center Links */}
+
           <div className="main-navbar-center">
             <nav className="main-navbar-links">
               <a href="/" onClick={(e) => linkNavbar(e, "home")}>
@@ -150,7 +150,7 @@ const Header = () => {
             </nav>
           </div>
 
-          {/* Search + Icons */}
+
           <div className="main-navbar-right">
             <div className="main-search-wrapper" ref={wrapperRef}>
               <form onSubmit={onSearch}>
@@ -185,7 +185,7 @@ const Header = () => {
             </div>
 
             <div className="main-navbar-icons">
-              {/* Custom Order Button */}
+
               <button
                 className="main-custom-order-btn"
                 onClick={() => navigate("/custom-order")}
@@ -195,14 +195,14 @@ const Header = () => {
                 <span className="main-custom-order-text">Custom</span>
               </button>
 
-              {/* Cart always */}
+
               <MdOutlineShoppingCart
                 className="main-cart-logo"
                 onClick={() => navigate("/cart")}
                 title="Shopping Cart"
               />
 
-              {/* Profile & Logout only when logged in */}
+
               {user && (
                 <>
                   <MdAccountCircle

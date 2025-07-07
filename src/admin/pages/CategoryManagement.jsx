@@ -27,7 +27,7 @@ function CategoryManagement() {
         try {
             const token = localStorage.getItem("token")
             const response = await axios.get(
-                "http://localhost:5000/api/categories", // <-- note the “http://”
+                "/api/categories", // <-- note the “http://”
                 { headers: { Authorization: `Bearer ${token}` } }
             )
             setCategories(response.data.data || response.data)
@@ -43,7 +43,7 @@ function CategoryManagement() {
         try {
             const token = localStorage.getItem("token");
             await axios.delete(
-                `http://localhost:5000/api/categories/${categoryId}/permanent`,
+                `/api/categories/${categoryId}/permanent`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             await fetchCategories();
@@ -62,11 +62,11 @@ function CategoryManagement() {
             const token = localStorage.getItem("token")
 
             if (editingCategory) {
-                await axios.put(`http://localhost:5000/api/categories/${editingCategory._id}`, formData, {
+                await axios.put(`/api/categories/${editingCategory._id}`, formData, {
                     headers: { Authorization: `Bearer ${token}` },
                 })
             } else {
-                await axios.post("http://localhost:5000/api/categories", formData, {
+                await axios.post("/api/categories", formData, {
                     headers: { Authorization: `Bearer ${token}` },
                 })
             }
@@ -98,7 +98,7 @@ function CategoryManagement() {
 
         try {
             const token = localStorage.getItem("token")
-            await axios.delete(`http://localhost:5000/api/categories/${categoryId}`, {
+            await axios.delete(`/api/categories/${categoryId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             })
             await fetchCategories()
@@ -113,7 +113,7 @@ function CategoryManagement() {
         try {
             const token = localStorage.getItem("token")
             await axios.put(
-                `http://localhost:5000/api/categories/${category._id}`,
+                `/api/categories/${category._id}`,
                 {
                     ...category,
                     isActive: !category.isActive,

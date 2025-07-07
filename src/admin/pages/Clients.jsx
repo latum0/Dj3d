@@ -31,7 +31,7 @@ function Clients() {
   const fetchClients = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get('http://localhost:5000/api/users/clients', {
+      const response = await axios.get('/api/users/clients', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -53,7 +53,7 @@ function Clients() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await axios.post('http://localhost:5000/api/users/signup', formData, {
+      await axios.post('/api/users/signup', formData, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -74,7 +74,7 @@ function Clients() {
     setIsLoading(true);
     try {
       await axios.put(
-        `http://localhost:5000/api/users/${editingClient._id}`,
+        `/api/users/${editingClient._id}`,
         { status: editingClient.status },
         {
           headers: {
@@ -123,7 +123,7 @@ function Clients() {
     if (window.confirm('Êtes-vous sûr de vouloir désactiver ce compte ?')) {
       try {
         await axios.put(
-          `http://localhost:5000/api/users/${clientId}/disable`,
+          `/api/users/${clientId}/disable`,
           {},
           {
             headers: {

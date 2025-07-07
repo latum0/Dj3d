@@ -1,11 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import m1 from '../assets/m1.png';
+
 import m12 from '../assets/m12.png';
 import m13 from '../assets/m13.png';
-import c from '../assets/c.png';
-import u from '../assets/u.png';
-import logo_v2 from '../assets/logo_v2.webp';
+
+
 import './contact.css';
 
 const Contact = () => {

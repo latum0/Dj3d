@@ -159,7 +159,7 @@ const CustomOrder = () => {
             }
 
             await axios.post(
-                "http://localhost:5000/api/orders",
+                "/api/orders",
                 payload,
                 {
                     headers: {

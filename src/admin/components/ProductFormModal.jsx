@@ -81,7 +81,7 @@ function ProductFormModal({ show, product, categories, onClose, onSave, onError 
             if (imageFiles.length > 0) {
                 const uploadData = new FormData()
                 imageFiles.forEach((file) => uploadData.append("files", file))
-                const uploadRes = await axios.post("http://localhost:5000/api/upload", uploadData, {
+                const uploadRes = await axios.post("/api/upload", uploadData, {
                     headers: { Authorization: `Bearer ${token}` },
                 })
                 imageUrls = uploadRes.data.urls || []
@@ -100,9 +100,9 @@ function ProductFormModal({ show, product, categories, onClose, onSave, onError 
 
             const config = { headers: { Authorization: `Bearer ${token}` } }
             if (product) {
-                await axios.put(`http://localhost:5000/api/products/${product._id}`, payload, config)
+                await axios.put(`/api/products/${product._id}`, payload, config)
             } else {
-                await axios.post("http://localhost:5000/api/products", payload, config)
+                await axios.post("/api/products", payload, config)
             }
 
             onSave()

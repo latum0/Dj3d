@@ -25,7 +25,7 @@ function Orders() {
         const token = localStorage.getItem("token")
         if (!token) return window.location.replace("/login")
 
-        const resp = await axios.get("http://localhost:5000/api/orders", {
+        const resp = await axios.get("/api/orders", {
           headers: { Authorization: `Bearer ${token}` },
         })
         const list = Array.isArray(resp.data.data)
@@ -65,7 +65,7 @@ function Orders() {
   const confirmCancelOrder = async () => {
     try {
       const token = localStorage.getItem("token")
-      await axios.delete(`http://localhost:5000/api/orders/${selectedOrder._id}/cancel`, {
+      await axios.delete(`/api/orders/${selectedOrder._id}/cancel`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       setOrders((prev) => prev.map((o) => (o._id === selectedOrder._id ? { ...o, status: "Cancelled" } : o)))

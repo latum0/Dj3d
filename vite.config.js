@@ -1,9 +1,18 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
   server: {
-    // Assure-toi que ton serveur tourne bien sur un bon port
+    proxy: {
+      // Forward /api/* to your Render backend
+      '/api': {
+        target: 'https://threedecom.onrender.com',
+        changeOrigin: true,
+        secure: true,
+        // cookieDomainRewrite makes sure Set-Cookie still comes back as localhost
+        cookieDomainRewrite: 'localhost',
+      },
+    },
   },
 });

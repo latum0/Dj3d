@@ -13,7 +13,7 @@ export default function Signup() {
   const handleSubmit = async ({ name, email, password }) => {
     setLoading(true); // Début du chargement
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/register", { name, email, password });
+      const response = await axios.post("/api/auth/register", { name, email, password });
 
       // Si l'inscription réussit, on se connecte automatiquement
       localStorage.setItem("token", response.data.token); // Sauvegarder le token dans localStorage

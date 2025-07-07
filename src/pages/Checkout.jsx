@@ -39,7 +39,7 @@ const Checkout = () => {
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         }
         const res = await fetch(
-          "http://localhost:5000/api/cart",
+          "api/cart",
           {
             method: "GET",
             headers,
@@ -177,7 +177,7 @@ const Checkout = () => {
       }
 
       const response = await fetch(
-        "http://localhost:5000/api/orders",
+        "/api/orders",
         {
           method: "POST",
           headers,

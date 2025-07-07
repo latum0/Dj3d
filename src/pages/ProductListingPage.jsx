@@ -258,7 +258,7 @@ const ProductListingPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/products');
+        const response = await fetch('/api/products');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -446,7 +446,7 @@ const ProductListingPage = () => {
                       : product.image || 'https://via.placeholder.com/150'
                   }
                   price={(product.salePrice || product.price)?.toFixed
-                    ? ((product.salePrice || product.price) / 100).toFixed(2)
+                    ? ((product.salePrice || product.price)).toFixed(2)
                     : '0.00'}
                   star={product.rating || 0}
                   rating={product.rating || 0}

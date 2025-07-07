@@ -17,7 +17,7 @@ const Cart = () => {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:5000/api/cart", {
+        const response = await fetch("api/cart", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -52,7 +52,7 @@ const Cart = () => {
     if (newQuantity < 1) return;
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/cart", {
+      const response = await fetch("api/cart", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -72,7 +72,7 @@ const Cart = () => {
   const removeItem = async (productId) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/cart", {
+      const response = await fetch("api/cart", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -93,7 +93,7 @@ const Cart = () => {
     if (!window.confirm("Êtes-vous sûr de vouloir vider votre panier ?")) return;
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/cart/clear", {
+      const response = await fetch("api/cart/clear", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

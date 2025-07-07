@@ -98,16 +98,19 @@
   padding: 1.5rem;
 }
 
+
 .product-title {
   font-size: 1.1rem;
   font-weight: 600;
   color: #000000;
   margin-bottom: 0.5rem;
-
-  /* Overflow protection */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-decoration: none;
+  /* remove underline */
+  display: inline-block;
+  /* same reason as above */
 }
 
 .price-info {
@@ -125,6 +128,10 @@
   font-size: 1.1rem;
   color: #007BFF;
   margin: 0;
+  text-decoration: none;
+  /* remove underline */
+  display: inline-block;
+  /* avoid any inherited text‑decoration from parent links */
 }
 
 .rating-wrapper {

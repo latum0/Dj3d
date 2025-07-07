@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
-import CardImage from "../components/ui/CardImage";
+import CardImage from "../components/ui/cardimage";
 import FormContainer from "../components/ui/FormContainer";
 import "./Login.css";
 
@@ -25,7 +25,7 @@ export default function Login() {
     setError(null);
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        "/api/auth/login",
         { email, password },
         { withCredentials: true }
       );

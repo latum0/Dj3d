@@ -1,9 +1,23 @@
-.top-best-product-container{
+.top-best-product-container {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+
     max-width: 1350px;
     margin: 0 auto;
+}
+
+.products-grid {
+    display: flex;
+    /* make children flow in a row */
+    flex-wrap: wrap;
+    /* wrap to next line if they overflow */
+    gap: 16px;
+    /* space between cards */
+    justify-content: flex-start;
+    /* align to the left */
+    margin-top: 24px;
+    /* some breathing room below header */
 }
 
 .view-all-button {
@@ -15,10 +29,10 @@
     background-color: #007BFF;
     font-size: 16px;
     font-weight: 500px;
-    transition: 
-    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 0.3s ease,
-    bottom 0.3s ease;
+    transition:
+        transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 0.3s ease,
+        bottom 0.3s ease;
 
 }
 
@@ -26,4 +40,4 @@
     transform: scale(1.02);
     z-index: 1;
     background-color: #1b89ff;
-  }
+}

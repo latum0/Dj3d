@@ -18,7 +18,7 @@ export default function OrderAddingModal({
             try {
                 const token = localStorage.getItem("token")
                 const resp = await axios.get(
-                    "http://localhost:5000/api/products",
+                    "/api/products",
                     { headers: { Authorization: `Bearer ${token}` } }
                 )
                 const list = Array.isArray(resp.data.data)
@@ -123,7 +123,7 @@ export default function OrderAddingModal({
                 totalAmount: calculateTotal(),
             }
             const resp = await axios.post(
-                "http://localhost:5000/api/orders",
+                "/api/orders",
                 payload,
                 {
                     headers: { Authorization: `Bearer ${token}` },

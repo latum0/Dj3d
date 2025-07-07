@@ -1,10 +1,11 @@
-// src/components/Card.jsx
 import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import "./Card.css";
 import StarEx from "./starEx";
 import { MdFavoriteBorder } from "react-icons/md";
 import { useAuth } from "../../context/AuthContext";
+
+
 
 function Card({ id, name, price, img, star, rating }) {
   const { user } = useAuth();
@@ -15,9 +16,9 @@ function Card({ id, name, price, img, star, rating }) {
   const fetchCart = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/cart", {
+      const res = await fetch("api/cart", {
         method: "GET",
-        credentials: "include",
+        credentials: "include",           // ← send guestId cookie
         headers: {
           "Content-Type": "application/json",
           ...(token && { Authorization: `Bearer ${token}` }),
@@ -25,8 +26,11 @@ function Card({ id, name, price, img, star, rating }) {
       });
       if (!res.ok) return;
       const cart = await res.json();
-      const added = Array.isArray(cart.items) &&
-        cart.items.some(item => item.product._id.toString() === id.toString());
+      const added =
+        Array.isArray(cart.items) &&
+        cart.items.some(
+          (item) => item.product._id.toString() === id.toString()
+        );
       setIsAdded(added);
     } catch (err) {
       console.error("Error fetching cart:", err);
@@ -43,9 +47,9 @@ function Card({ id, name, price, img, star, rating }) {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/cart", {
+      const res = await fetch("api/cart", {
         method: "POST",
-        credentials: "include",
+        credentials: "include",           // ← include guestId or auth cookie
         headers: {
           "Content-Type": "application/json",
           ...(token && { Authorization: `Bearer ${token}` }),
@@ -56,7 +60,7 @@ function Card({ id, name, price, img, star, rating }) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.error || err.message || "Failed to add to cart");
       }
-      // Immediately update UI without waiting for second fetch
+      // Immediately update UI
       setIsAdded(true);
     } catch (err) {
       console.error("Add to cart error:", err);
@@ -66,7 +70,7 @@ function Card({ id, name, price, img, star, rating }) {
 
   const handleLike = (e) => {
     e.preventDefault();
-    setIsLiked(v => !v);
+    setIsLiked((v) => !v);
   };
 
   return (

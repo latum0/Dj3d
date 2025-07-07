@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
     (async () => {
       try {
         // Fetch profile and merge cart
-        const profileRes = await fetch("http://localhost:5000/api/users/profile", {
+        const profileRes = await fetch("/api/users/profile", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }) => {
         setUser(profile);
 
         // Trigger cart merge & clear guestId cookie server-side
-        await fetch("http://localhost:5000/api/cart", {
+        await fetch("/api/cart", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
     setUser(u);
 
     // Trigger backend merge & clear guestId cookie
-    await fetch("http://localhost:5000/api/cart", {
+    await fetch("/api/cart", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       // Tell server to clear all cookies
-      await fetch("http://localhost:5000/api/auth/logout", {
+      await fetch("/api/auth/logout", {
         method: "POST",
         credentials: "include", // include cookies
       });

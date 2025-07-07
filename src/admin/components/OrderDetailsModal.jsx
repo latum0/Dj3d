@@ -21,7 +21,7 @@ function OrderDetailsModal({ show, order, onClose, onOrderUpdate, onError, getBa
         try {
             const token = localStorage.getItem("token")
             await axios.put(
-                `http://localhost:5000/api/orders/${order._id}/status`,
+                `/api/orders/${order._id}/status`,
                 { status: newStatus },
                 { headers: { Authorization: `Bearer ${token}` } },
             )
