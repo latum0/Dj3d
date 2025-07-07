@@ -3,10 +3,17 @@ import { v4 as uuidv4 } from "uuid";
 
 export function initGuestId() {
     // check if cookie already set
-    const has = document.cookie.split("; ").some(c => c.startsWith("guestId="));
-    if (!has) {
-        const id = uuidv4();
-        // set a 30‑day cookie
-        document.cookie = `guestId=${id}; Path=/; max-age=${60 * 60 * 24 * 30}`;
+    let guestId = localStorage.getItem('guestId');
+    if (!guestId) {
+        guestId = crypto.randomUUID();
+        localStorage.setItem('guestId', guestId);
+        // Also set as cookie for backend if needed
+        document.cookie = `guestId=${guestId}; path=/; SameSite=None; Secure; max-age=31536000`;
     }
+    return guestId;
+}
+
+export function clearGuestId() {
+    localStorage.removeItem('guestId');
+    document.cookie = 'guestId=; Max-Age=0; path=/; SameSite=None; Secure;';
 }

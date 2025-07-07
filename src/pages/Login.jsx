@@ -8,6 +8,7 @@ import { useAuth } from "../context/AuthContext";
 import CardImage from "../components/ui/cardimage";
 import FormContainer from "../components/ui/FormContainer";
 import "./Login.css";
+import { clearGuestId } from '../utils/guest';
 
 export default function Login() {
   const [error, setError] = useState(null);
@@ -32,6 +33,7 @@ export default function Login() {
         { withCredentials: true }
       );
       await login({ user: data.user, accessToken: data.accessToken });
+      clearGuestId();
       // After login, guestId cookie is cleared by backend merge
       // You can now fetch cart in components or via context update
     } catch (err) {
