@@ -289,7 +289,7 @@ const Cart = () => {
                 </div>
               </div>
               <button
-                className="checkout-btn"
+                className="checkout-button"
                 onClick={() => navigate("/checkout")}
               >
                 Passer à la caisse

@@ -10,70 +10,75 @@ function Orders() {
   const RAW_API = import.meta.env.VITE_API_URL || "";
   const API_BASE = RAW_API.replace(/\/$/, "");
 
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [paymentFilter, setPaymentFilter] = useState("all");
-  const [openDropdown, setOpenDropdown] = useState(null);
-  const [selectedOrder, setSelectedOrder] = useState(null);
-  const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const [showCancelModal, setShowCancelModal] = useState(false);
-  const [showAddOrderModal, setShowAddOrderModal] = useState(false);
+  const [orders, setOrders] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [statusFilter, setStatusFilter] = useState("all")
+  const [paymentFilter, setPaymentFilter] = useState("all")
+  const [openDropdown, setOpenDropdown] = useState(null)
+  const [selectedOrder, setSelectedOrder] = useState(null)
+  const [showDetailsModal, setShowDetailsModal] = useState(false)
+  const [showCancelModal, setShowCancelModal] = useState(false)
+  const [showAddOrderModal, setShowAddOrderModal] = useState(false)
 
   useEffect(() => {
-    fetchAll();
-  }, []);
+    const fetchAll = async () => {
+      try {
+        const token = localStorage.getItem("token")
+        if (!token) return window.location.replace("/login")
 
-  const fetchAll = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) return window.location.replace("/login");
-      const resp = await axios.get(
-        `${API_BASE}/orders`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      const list = Array.isArray(resp.data.data)
-        ? resp.data.data
-        : Array.isArray(resp.data)
-          ? resp.data
-          : resp.data.data;
-      setOrders(list);
-    } catch (err) {
-      console.error("API Error:", err.response || err);
-      if (err.response?.status === 401) {
-        localStorage.removeItem("token");
-        return window.location.replace("/login");
+        const resp = await axios.get(`${API_BASE}/orders`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        const list = Array.isArray(resp.data.data)
+          ? resp.data.data
+          : Array.isArray(resp.data)
+            ? resp.data
+            : resp.data.data
+        setOrders(list)
+      } catch (err) {
+        console.error("API Error:", err.response || err)
+        if (err.response?.status === 401) {
+          localStorage.removeItem("token")
+          return window.location.replace("/login")
+        }
+        setError(err.response?.data?.message || "Erreur lors de la récupération des commandes")
+      } finally {
+        setLoading(false)
       }
-      setError(err.response?.data?.message || "Erreur lors de la récupération des commandes");
-    } finally {
-      setLoading(false);
     }
-  };
+    fetchAll()
+  }, [])
 
-  const toggleDropdown = (id) =>
-    setOpenDropdown(prev => (prev === id ? null : id));
+  const toggleDropdown = (id) => setOpenDropdown((prev) => (prev === id ? null : id))
+
+  const handleViewDetails = (order) => {
+    setSelectedOrder(order)
+    setShowDetailsModal(true)
+    setOpenDropdown(null)
+  }
+
+  const handleCancelOrder = (order) => {
+    setSelectedOrder(order)
+    setShowCancelModal(true)
+    setOpenDropdown(null)
+  }
 
   const confirmCancelOrder = async () => {
     try {
-      const token = localStorage.getItem("token");
-      await axios.delete(
-        `${API_BASE}/orders/${selectedOrder._id}/cancel`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setOrders(prev =>
-        prev.map(o =>
-          o._id === selectedOrder._id ? { ...o, status: "Cancelled" } : o
-        )
-      );
+      const token = localStorage.getItem("token")
+      await axios.delete(`${API_BASE}/orders/${selectedOrder._id}/cancel`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      setOrders((prev) => prev.map((o) => (o._id === selectedOrder._id ? { ...o, status: "Cancelled" } : o)))
     } catch (err) {
-      console.error("API rejected cancel:", err.response || err);
-      setError(err.response?.data?.message || "Erreur lors de l'annulation de la commande");
+      console.error("API rejected cancel:", err.response || err)
+      setError(err.response?.data?.message || "Erreur lors de l'annulation de la commande")
     } finally {
-      setShowCancelModal(false);
+      setShowCancelModal(false)
     }
-  };
+  }
 
   const handleOrderUpdate = (updatedOrder) => {
     setOrders((prev) => prev.map((o) => (o._id === updatedOrder._id ? updatedOrder : o)))
