@@ -236,6 +236,8 @@ const ProductListingPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  const RAW_API = import.meta.env.VITE_API_URL || "";
+  const API_BASE = RAW_API.replace(/\/$/, "");
 
   // State for fetched products and filtering
   const [allProducts, setAllProducts] = useState([]);
@@ -258,7 +260,7 @@ const ProductListingPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('/api/products');
+        const response = await fetch(`${API_BASE}/products`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

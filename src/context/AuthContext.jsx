@@ -1,3 +1,4 @@
+// src/context/AuthContext.jsx
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
@@ -17,26 +18,32 @@ export const AuthProvider = ({ children }) => {
     const existingGuestId = getCookie("guestId");
     if (existingGuestId) setGuestId(existingGuestId);
 
+    const RAW_API = import.meta.env.VITE_API_URL || "";
+    const API_BASE = RAW_API.replace(/\/$/, "");
+
     const token = localStorage.getItem("token");
     if (!token) return;
 
     (async () => {
       try {
-        // Fetch profile and merge cart
-        const profileRes = await fetch("/api/users/profile", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          credentials: "include",
-        });
+        // Fetch profile
+        const profileRes = await fetch(
+          `${API_BASE}/users/profile`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            credentials: "include",
+          }
+        );
         if (!profileRes.ok) throw new Error("Not authenticated");
         const profile = await profileRes.json();
         setUser(profile);
 
-        // Trigger cart merge & clear guestId cookie server-side
-        await fetch("/api/cart", {
+        // Merge cart
+        await fetch(`${API_BASE}/cart`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -45,7 +52,6 @@ export const AuthProvider = ({ children }) => {
           credentials: "include",
         });
         setGuestId(null);
-
       } catch {
         localStorage.removeItem("token");
         setUser(null);
@@ -56,9 +62,10 @@ export const AuthProvider = ({ children }) => {
   const login = async ({ user: u, accessToken }) => {
     localStorage.setItem("token", accessToken);
     setUser(u);
+    const RAW_API = import.meta.env.VITE_API_URL || "";
+    const API_BASE = RAW_API.replace(/\/$/, "");
 
-    // Trigger backend merge & clear guestId cookie
-    await fetch("/api/cart", {
+    await fetch(`${API_BASE}/cart`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -70,17 +77,16 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
+    const RAW_API = import.meta.env.VITE_API_URL || "";
+    const API_BASE = RAW_API.replace(/\/$/, "");
     try {
-      // Tell server to clear all cookies
-      await fetch("/api/auth/logout", {
+      await fetch(`${API_BASE}/auth/logout`, {
         method: "POST",
-        credentials: "include", // include cookies
+        credentials: "include",
       });
     } catch (err) {
       console.error("Logout request failed", err);
     }
-
-    // Clear local state
     localStorage.removeItem("token");
     setUser(null);
     setGuestId(null);

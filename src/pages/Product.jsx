@@ -28,6 +28,8 @@ import { useAuth } from "../context/AuthContext"
 const Product = () => {
   const { id } = useParams()
   const { user } = useAuth()
+  const RAW_API = import.meta.env.VITE_API_URL || "";
+  const API_BASE = RAW_API.replace(/\/$/, "");
 
   // core states
   const [product, setProduct] = useState(null)
@@ -60,7 +62,7 @@ const Product = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`/api/products/${id}`)
+        const res = await fetch(`${API_BASE}/products/${id}`)
         if (!res.ok) throw new Error("Product not found")
         const { data } = await res.json()
         setProduct(data)
@@ -79,7 +81,7 @@ const Product = () => {
     const checkCartStatus = async () => {
       try {
         const token = localStorage.getItem("token")
-        const res = await fetch("/api/cart", {
+        const res = await fetch("${API_BASE}/cart", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -131,7 +133,7 @@ const Product = () => {
 
     try {
       const token = localStorage.getItem("token")
-      const res = await fetch("/api/cart", {
+      const res = await fetch(`${API_BASE}/cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

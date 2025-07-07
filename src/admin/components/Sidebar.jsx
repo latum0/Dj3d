@@ -7,25 +7,24 @@ function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const isActive = (path) =>
+  const RAW_API = import.meta.env.VITE_API_URL || "";
+  const API_BASE = RAW_API.replace(/\/$/, "");
+
+  const isActive = path =>
     location.pathname === path ? "sidebar-item active" : "sidebar-item";
 
   const handleLogout = async () => {
     try {
-      // send the HTTP-only cookie with the request
       await axios.post(
-        "/api/auth/logout",
+        `${API_BASE}/auth/logout`,
         {},
         { withCredentials: true }
       );
     } catch (err) {
       console.warn("Logout API failed:", err);
     } finally {
-      // clear any client‑side state
       localStorage.clear();
-
       navigate("/login");
-      // force a full reload to ensure no old auth context lingers
       window.location.reload();
     }
   };

@@ -3,6 +3,10 @@ import './Clients.css';
 import axios from 'axios';
 
 function Clients() {
+  // Build the base API URL from your VITE env var
+  const RAW_API = import.meta.env.VITE_API_URL || "";
+  const API_BASE = RAW_API.replace(/\/$/, "");
+
   // États
   const [clients, setClients] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -31,39 +35,38 @@ function Clients() {
   const fetchClients = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get('/api/users/clients', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      // Filtrer pour exclure les admins
-      const filteredClients = response.data.filter(client => client.role !== 'admin');
-      setClients(filteredClients);
+      const token = localStorage.getItem('token');
+      const response = await axios.get(
+        `${API_BASE}/users/clients`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      const filtered = response.data.filter(c => c.role !== 'admin');
+      setClients(filtered);
       setError(null);
-    } catch (error) {
-      console.error('Erreur lors de la récupération des clients:', error);
+    } catch (err) {
+      console.error('Erreur lors de la récupération des clients:', err);
       setError('Impossible de charger les clients');
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Gestion des formulaires
   const handleAddClient = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await axios.post('/api/users/signup', formData, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
-      });
+      const token = localStorage.getItem('token');
+      await axios.post(
+        `${API_BASE}/users/signup`,
+        formData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       await fetchClients();
       setFormData({ name: '', email: '', phone: '', status: 'Actif', password: 'default123' });
       setShowForm(false);
-    } catch (error) {
-      console.error('Erreur lors de l\'ajout du client:', error);
-      setError('Erreur lors de l\'ajout du client');
+    } catch (err) {
+      console.error("Erreur lors de l'ajout du client:", err);
+      setError("Erreur lors de l'ajout du client");
     } finally {
       setIsLoading(false);
     }
@@ -73,72 +76,53 @@ function Clients() {
     e.preventDefault();
     setIsLoading(true);
     try {
+      const token = localStorage.getItem('token');
       await axios.put(
-        `/api/users/${editingClient._id}`,
+        `${API_BASE}/users/${editingClient._id}`,
         { status: editingClient.status },
         {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            Authorization: `Bearer ${token}`
           }
         }
       );
-
-      setClients(clients.map(client =>
-        client._id === editingClient._id ? { ...client, status: editingClient.status } : client
+      setClients(clients.map(c =>
+        c._id === editingClient._id
+          ? { ...c, status: editingClient.status }
+          : c
       ));
       setEditingClient(null);
-    } catch (error) {
-      console.error('Erreur lors de la modification:', error);
-      setError('Échec de la modification');
+    } catch (err) {
+      console.error("Erreur lors de la modification:", err);
+      setError("Échec de la modification");
       fetchClients();
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Gestion des menus
   const toggleMenu = (clientId, e) => {
     e.stopPropagation();
     setActiveMenu(activeMenu === clientId ? null : clientId);
   };
 
-  const closeAllMenus = () => {
-    setActiveMenu(null);
-  };
-
-  // Actions
-  const handleViewProfile = (client) => {
-    setSelectedClient(client);
-    setShowProfile(true);
-    setActiveMenu(null);
-  };
-
-  const handleEditClient = (client) => {
-    setEditingClient({ ...client });
-    setActiveMenu(null);
-  };
-
   const handleDisableAccount = async (clientId) => {
-    if (window.confirm('Êtes-vous sûr de vouloir désactiver ce compte ?')) {
-      try {
-        await axios.put(
-          `/api/users/${clientId}/disable`,
-          {},
-          {
-            headers: {
-              'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-          }
-        );
-        fetchClients();
-      } catch (error) {
-        console.error('Erreur lors de la désactivation:', error);
-        setError('Échec de la désactivation');
-      }
+    if (!window.confirm('Êtes-vous sûr de vouloir désactiver ce compte ?'))
+      return;
+    try {
+      const token = localStorage.getItem('token');
+      await axios.put(
+        `${API_BASE}/users/${clientId}/disable`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      fetchClients();
+    } catch (err) {
+      console.error("Erreur lors de la désactivation:", err);
+      setError("Échec de la désactivation");
     }
   };
-
   // Effets
   useEffect(() => {
     const handleClickOutside = () => closeAllMenus();

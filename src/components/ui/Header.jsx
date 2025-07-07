@@ -10,6 +10,8 @@ import {
 import { useAuth } from "../../context/AuthContext";
 
 const Header = () => {
+  const RAW_API = import.meta.env.VITE_API_URL || "";
+  const API_BASE = RAW_API.replace(/\/$/, "");
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuth();
@@ -77,7 +79,7 @@ const Header = () => {
     }
     try {
       const res = await fetch(
-        `/apiproducts/search?q=${encodeURIComponent(
+        `${API_BASE}/products/search?q=${encodeURIComponent(
           t
         )}`
       );

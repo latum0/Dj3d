@@ -20,65 +20,71 @@ function Products() {
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [openDropdown, setOpenDropdown] = useState(null)
 
+  const RAW_API = import.meta.env.VITE_API_URL || "";
+  const API_BASE = RAW_API.replace(/\/$/, "");
+
   useEffect(() => {
-    fetchProducts()
-    fetchCategories()
-  }, [])
+    fetchProducts();
+    fetchCategories();
+  }, []);
 
   const fetchProducts = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-      const token = localStorage.getItem("token")
-      const res = await axios.get("/api/products", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      setProducts(res.data.data || res.data)
+      const token = localStorage.getItem("token");
+      const res = await axios.get(
+        `${API_BASE}/products`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setProducts(res.data.data || res.data);
     } catch (err) {
-      console.error(err)
-      setError("Erreur lors du chargement des produits")
+      console.error(err);
+      setError("Erreur lors du chargement des produits");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const fetchCategories = async () => {
     try {
-      const token = localStorage.getItem("token")
-      const res = await axios.get("/api/categories", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      setCategories(res.data.data || res.data)
+      const token = localStorage.getItem("token");
+      const res = await axios.get(
+        `${API_BASE}/categories`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setCategories(res.data.data || res.data);
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
-  }
+  };
 
-  const handleEdit = (product) => {
-    setEditingProduct(product)
-    setShowFormModal(true)
-    setOpenDropdown(null)
-  }
+  const handleEdit = product => {
+    setEditingProduct(product);
+    setShowFormModal(true);
+    setOpenDropdown(null);
+  };
 
-  const handleViewDetails = (product) => {
-    setSelectedProduct(product)
-    setShowDetailsModal(true)
-    setOpenDropdown(null)
-  }
+  const handleViewDetails = product => {
+    setSelectedProduct(product);
+    setShowDetailsModal(true);
+    setOpenDropdown(null);
+  };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Supprimer ce produit ?")) return
+  const handleDelete = async id => {
+    if (!window.confirm("Supprimer ce produit ?")) return;
     try {
-      const token = localStorage.getItem("token")
-      await axios.delete(`/api/products/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      await fetchProducts()
-      setOpenDropdown(null)
+      const token = localStorage.getItem("token");
+      await axios.delete(
+        `${API_BASE}/products/${id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      await fetchProducts();
+      setOpenDropdown(null);
     } catch (err) {
-      console.error(err)
-      setError("Erreur lors de la suppression")
+      console.error(err);
+      setError("Erreur lors de la suppression");
     }
-  }
+  };
 
   const handleProductSave = () => {
     fetchProducts()

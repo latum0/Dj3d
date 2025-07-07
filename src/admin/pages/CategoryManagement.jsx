@@ -12,6 +12,8 @@ function CategoryManagement() {
     const [showForm, setShowForm] = useState(false)
     const [editingCategory, setEditingCategory] = useState(null)
     const [openDropdown, setOpenDropdown] = useState(null)
+    const RAW_API = import.meta.env.VITE_API_URL || "";
+    const API_BASE = RAW_API.replace(/\/$/, "");
 
     const [formData, setFormData] = useState({
         name: "",
@@ -27,7 +29,7 @@ function CategoryManagement() {
         try {
             const token = localStorage.getItem("token")
             const response = await axios.get(
-                "/api/categories", // <-- note the “http://”
+                `${API_BASE}/api/categories`, // <-- note the “http://”
                 { headers: { Authorization: `Bearer ${token}` } }
             )
             setCategories(response.data.data || response.data)
@@ -43,7 +45,7 @@ function CategoryManagement() {
         try {
             const token = localStorage.getItem("token");
             await axios.delete(
-                `/api/categories/${categoryId}/permanent`,
+                `${API_BASE}/categories/${categoryId}/permanent`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             await fetchCategories();
@@ -62,11 +64,11 @@ function CategoryManagement() {
             const token = localStorage.getItem("token")
 
             if (editingCategory) {
-                await axios.put(`/api/categories/${editingCategory._id}`, formData, {
+                await axios.put(`${API_BASE}/categories/${editingCategory._id}`, formData, {
                     headers: { Authorization: `Bearer ${token}` },
                 })
             } else {
-                await axios.post("/api/categories", formData, {
+                await axios.post(`${API_BASE}/api/categories`, formData, {
                     headers: { Authorization: `Bearer ${token}` },
                 })
             }
@@ -98,7 +100,7 @@ function CategoryManagement() {
 
         try {
             const token = localStorage.getItem("token")
-            await axios.delete(`/api/categories/${categoryId}`, {
+            await axios.delete(`${API_BASE}/categories/${categoryId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             })
             await fetchCategories()
@@ -113,7 +115,7 @@ function CategoryManagement() {
         try {
             const token = localStorage.getItem("token")
             await axios.put(
-                `/api/categories/${category._id}`,
+                `${API_BASE}/categories/${category._id}`,
                 {
                     ...category,
                     isActive: !category.isActive,

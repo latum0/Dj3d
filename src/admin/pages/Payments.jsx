@@ -5,36 +5,8 @@ import './Payments.css';
 function VendorPayments() {
   // Récupération du token directement depuis localStorage
   const token = localStorage.getItem('token');
-
-  // États pour la gestion des données
-  const [payments, setPayments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  // États pour les filtres
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('Tous les statuts');
-  const [methodFilter, setMethodFilter] = useState('Toutes les méthodes');
-
-  // États pour le formulaire
-  const [showPaymentForm, setShowPaymentForm] = useState(false);
-  const [formData, setFormData] = useState({
-    vendorName: '',
-    vendorEmail: '',
-    amount: '',
-    method: 'Virement bancaire',
-    reference: generateReference(),
-    bankAccount: '',
-    description: ''
-  });
-
-  // Génération d'une référence aléatoire
-  function generateReference() {
-    return `PAY-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
-  }
-
-  // Lecture de l'URL de l'API
-  const API_BASE = "/api";
+  const RAW_API = import.meta.env.VITE_API_URL || "";
+  const API_BASE = RAW_API.replace(/\/$/, "");
 
   // Instance axios configurée
   const api = axios.create({
@@ -46,11 +18,35 @@ function VendorPayments() {
     withCredentials: true
   });
 
+  const [payments, setPayments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('Tous les statuts');
+  const [methodFilter, setMethodFilter] = useState('Toutes les méthodes');
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [formData, setFormData] = useState({
+    vendorName: '',
+    vendorEmail: '',
+    amount: '',
+    method: 'Virement bancaire',
+    reference: generateReference(),
+    bankAccount: '',
+    description: ''
+  });
+
+  function generateReference() {
+    return `PAY-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
+  }
+
   // Chargement initial des paiements
   useEffect(() => {
     setLoading(true);
     api.get('/payments')
-      .then(res => setPayments(res.data))
+      .then(res => {
+        setPayments(res.data);
+        setError(null);
+      })
       .catch(err => {
         console.error('API Error:', err);
         if (err.response?.status === 404) setPayments([]);
@@ -58,55 +54,33 @@ function VendorPayments() {
         else setError(err.response?.data?.message || err.message);
       })
       .finally(() => setLoading(false));
-  }, []); // Exécuter seulement au montage, le token étant lu en interne
-
-  // Fonctions de formatage
-  const formatStatus = status => ({
-    'Success': 'Payé',
-    'Initiated': 'En attente',
-    'Failed': 'Échoué',
-    'Refunded': 'Remboursé'
-  }[status] || status);
-
-  const getStatusClass = status => ({
-    'Success': 'status-paid',
-    'Initiated': 'status-waiting',
-    'Failed': 'status-failed',
-    'Refunded': 'status-refunded'
-  }[status] || '');
-
-  const formatDate = dateString => new Date(dateString)
-    .toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-
-  const formatCurrency = amount => new Intl.NumberFormat('fr-FR', {
-    style: 'currency', currency: 'EUR', minimumFractionDigits: 2
-  }).format(amount);
-
-  // Gestion du formulaire
-  const handlePaymentButtonClick = () => setShowPaymentForm(true);
-
-  const handleFormChange = e => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+  }, []);
 
   const handleSubmitPayment = e => {
     e.preventDefault();
     const payload = {
       reference: formData.reference,
-      vendor: { name: formData.vendorName, email: formData.vendorEmail, bankAccount: formData.bankAccount },
+      vendor: {
+        name: formData.vendorName,
+        email: formData.vendorEmail,
+        bankAccount: formData.bankAccount
+      },
       amount: parseFloat(formData.amount),
       method: formData.method,
       description: formData.description
     };
-
     api.post('/payments', payload)
       .then(res => {
         setPayments(prev => [res.data, ...prev]);
         setShowPaymentForm(false);
         setFormData({
-          vendorName: '', vendorEmail: '', amount: '', method: 'Virement bancaire',
-          reference: generateReference(), bankAccount: '', description: ''
+          vendorName: '',
+          vendorEmail: '',
+          amount: '',
+          method: 'Virement bancaire',
+          reference: generateReference(),
+          bankAccount: '',
+          description: ''
         });
         alert('Paiement créé avec succès!');
       })
@@ -115,7 +89,6 @@ function VendorPayments() {
         alert(err.response?.data?.error || 'Erreur lors de la création du paiement');
       });
   };
-
   // Filtrage des paiements
   const filteredPayments = payments.filter(p => {
     const search = searchTerm.toLowerCase();

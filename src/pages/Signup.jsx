@@ -11,9 +11,11 @@ export default function Signup() {
   const navigate = useNavigate();
 
   const handleSubmit = async ({ name, email, password }) => {
+    const RAW_API = import.meta.env.VITE_API_URL || "";
+    const API_BASE = RAW_API.replace(/\/$/, "");
     setLoading(true); // Début du chargement
     try {
-      const response = await axios.post("/api/auth/register", { name, email, password });
+      const response = await axios.post(`${API_BASE}/auth/register`, { name, email, password });
 
       // Si l'inscription réussit, on se connecte automatiquement
       localStorage.setItem("token", response.data.token); // Sauvegarder le token dans localStorage

@@ -10,6 +10,8 @@ const Cart = () => {
   const [promoCode, setPromoCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [promoApplied, setPromoApplied] = useState(false);
+  const RAW_API = import.meta.env.VITE_API_URL || "";
+  const API_BASE = RAW_API.replace(/\/$/, "");
 
   // Fetch cart data from API (users & guests)
   useEffect(() => {
@@ -17,7 +19,7 @@ const Cart = () => {
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("api/cart", {
+        const response = await fetch(`${API_BASE}/cart`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -52,7 +54,7 @@ const Cart = () => {
     if (newQuantity < 1) return;
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("api/cart", {
+      const response = await fetch(`${API_BASE}/cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -72,7 +74,7 @@ const Cart = () => {
   const removeItem = async (productId) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("api/cart", {
+      const response = await fetch(`${API_BASE}/cart`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -93,7 +95,7 @@ const Cart = () => {
     if (!window.confirm("Êtes-vous sûr de vouloir vider votre panier ?")) return;
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("api/cart/clear", {
+      const response = await fetch(`${API_BASE}/cart/clear`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

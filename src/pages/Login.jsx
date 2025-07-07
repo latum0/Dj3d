@@ -13,6 +13,8 @@ export default function Login() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { user, login } = useAuth();
+  const RAW_API = import.meta.env.VITE_API_URL || "";
+  const API_BASE = RAW_API.replace(/\/$/, "");
 
   useEffect(() => {
     if (!user) return;
@@ -25,7 +27,7 @@ export default function Login() {
     setError(null);
     try {
       const { data } = await axios.post(
-        "/api/auth/login",
+        `${API_BASE}/auth/login`,
         { email, password },
         { withCredentials: true }
       );

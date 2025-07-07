@@ -3,42 +3,48 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 function OrderDetailsModal({ show, order, onClose, onOrderUpdate, onError, getBadgeClass, frDate }) {
-    const [newStatus, setNewStatus] = useState("")
-    const [isUpdatingStatus, setIsUpdatingStatus] = useState(false)
-    const [statusUpdateSuccess, setStatusUpdateSuccess] = useState(false)
+
+    const [newStatus, setNewStatus] = useState("");
+    const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+    const [statusUpdateSuccess, setStatusUpdateSuccess] = useState(false);
+
+    const RAW_API = import.meta.env.VITE_API_URL || "";
+    const API_BASE = RAW_API.replace(/\/$/, "");
 
     useEffect(() => {
         if (order) {
-            setNewStatus(order.status)
-            setStatusUpdateSuccess(false)
+            setNewStatus(order.status);
+            setStatusUpdateSuccess(false);
         }
-    }, [order])
+    }, [order]);
 
     const handleStatusUpdate = async () => {
-        if (!order || newStatus === order.status) return
+        if (!order || newStatus === order.status) return;
+        setIsUpdatingStatus(true);
 
-        setIsUpdatingStatus(true)
         try {
-            const token = localStorage.getItem("token")
+            const token = localStorage.getItem("token");
             await axios.put(
-                `/api/orders/${order._id}/status`,
+                `${API_BASE}/orders/${order._id}/status`,
                 { status: newStatus },
-                { headers: { Authorization: `Bearer ${token}` } },
-            )
-
-            onOrderUpdate({ ...order, status: newStatus })
-            setStatusUpdateSuccess(true)
-            setTimeout(() => setStatusUpdateSuccess(false), 3000)
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            onOrderUpdate({ ...order, status: newStatus });
+            setStatusUpdateSuccess(true);
+            setTimeout(() => setStatusUpdateSuccess(false), 3000);
         } catch (err) {
-            console.error("Status update error:", err.response || err)
-            onError(err.response?.data?.message || "Erreur lors de la mise à jour du statut")
+            console.error("Status update error:", err.response || err);
+            onError(
+                err.response?.data?.message ||
+                "Erreur lors de la mise à jour du statut"
+            );
         } finally {
-            setIsUpdatingStatus(false)
+            setIsUpdatingStatus(false);
         }
-    }
+    };
 
-    if (!show || !order) return null
-    const isCustomOrder = order.items?.some(item => !!item.customImage)
+    if (!show || !order) return null;
+    const isCustomOrder = order.items?.some(item => !!item.customImage);
     return (
         <div className="orders-management-modal-overlay">
             <div className="orders-management-modal orders-management-modern-modal">

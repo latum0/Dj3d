@@ -6,197 +6,135 @@ import { useNavigate } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
 import "./Checkout.css"
 
-const Checkout = () => {
-  const navigate = useNavigate()
-  const { user, guestId } = useAuth()
+const Cart = () => {
+  const navigate = useNavigate();
+  const [cart, setCart] = useState({ items: [] });
+  const [loading, setLoading] = useState(true);
+  const [promoCode, setPromoCode] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const [promoApplied, setPromoApplied] = useState(false);
+  const RAW_API = import.meta.env.VITE_API_URL || "";
+  const API_BASE = RAW_API.replace(/\/$/, "");
 
-  // pull cart from backend so we can read any existing customName
-  const [cartItems, setCartItems] = useState([])
-  const [total, setTotal] = useState(0)
-  const [loadingCart, setLoadingCart] = useState(true)
-
-  const [formData, setFormData] = useState({
-    name: "",
-    city: "",
-    phoneNumber: "",
-    email: "",
-    saveInfo: true,
-    paymentMethod: "card",
-  })
-  const [customNames, setCustomNames] = useState({})
-  const [selectedCard, setSelectedCard] = useState("visa")
-  const [couponCode, setCouponCode] = useState("")
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState(null)
-
-  // fetch the cart document on mount
+  // Fetch cart data from API (users & guests)
   useEffect(() => {
     const fetchCart = async () => {
+      setLoading(true);
       try {
-        const token = localStorage.getItem("token")
-        const headers = {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        }
-        const res = await fetch(
-          "api/cart",
-          {
-            method: "GET",
-            headers,
-            credentials: "include",
-          }
-        )
-        const data = await res.json()
-        if (!res.ok) throw new Error(data.error || "Erreur chargement panier")
-        const items = data.cartItems || data.items || []
-        setCartItems(items)
-        setTotal(data.total ?? 0)
-        // if the cart item already has a customName, prefill it
-        const initialNames = {}
-        items.forEach((item, idx) => {
-          if (item.customName) {
-            initialNames[idx] = item.customName
-          }
-        })
-        setCustomNames(initialNames)
-      } catch (err) {
-        console.error(err)
+        const token = localStorage.getItem("token");
+        const response = await fetch(`${API_BASE}/cart`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token && { Authorization: `Bearer ${token}` }),
+          },
+          credentials: "include", // send guestId cookie if present
+        });
+        if (!response.ok) throw new Error("Failed to fetch cart");
+        const data = await response.json();
+        setCart(data ?? { items: [] });
+      } catch (error) {
+        console.error("Cart fetch error:", error);
+        setCart({ items: [] });
       } finally {
-        setLoadingCart(false)
+        setLoading(false);
       }
+    };
+
+    fetchCart();
+  }, []);
+
+  const applyPromoCode = () => {
+    if (promoCode === "SAVE10") {
+      setDiscount(10);
+      setPromoApplied(true);
+    } else {
+      alert("Code promo invalide");
     }
-    fetchCart()
-  }, [])
+  };
 
-  if (loadingCart) {
-    return (
-      <div className="checkout-page">
-        <p>Chargement du panier…</p>
-      </div>
-    )
-  }
+  const updateQuantity = async (productId, newQuantity) => {
+    if (newQuantity < 1) return;
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_BASE}/cart`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token && { Authorization: `Bearer ${token}` }),
+        },
+        credentials: "include",
+        body: JSON.stringify({ productId, quantity: newQuantity }),
+      });
+      if (!response.ok) throw new Error("Failed to update quantity");
+      const updated = await response.json();
+      setCart(updated ?? { items: [] });
+    } catch (error) {
+      console.error("Update quantity error:", error);
+    }
+  };
 
-  if (cartItems.length === 0) {
+  const removeItem = async (productId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_BASE}/cart`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token && { Authorization: `Bearer ${token}` }),
+        },
+        credentials: "include",
+        body: JSON.stringify({ productId }),
+      });
+      if (!response.ok) throw new Error("Failed to remove item");
+      const updated = await response.json();
+      setCart(updated ?? { items: [] });
+    } catch (error) {
+      console.error("Remove item error:", error);
+    }
+  };
+
+  const clearCart = async () => {
+    if (!window.confirm("Êtes-vous sûr de vouloir vider votre panier ?")) return;
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_BASE}/cart/clear"`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token && { Authorization: `Bearer ${token}` }),
+        },
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("Échec lors du vidage du panier");
+      setCart({ items: [] });
+    } catch (error) {
+      console.error("Clear cart error:", error);
+    }
+  };
+
+  // Safe defaults
+  const items = Array.isArray(cart.items) ? cart.items : [];
+  const subTotal = items.reduce(
+    (sum, item) => sum + (item?.product?.price ?? 0) * (item?.quantity ?? 0),
+    0
+  );
+  const tax = subTotal * 0.2;
+  const shipping = subTotal > 500 ? 0 : 99.99;
+  const total = subTotal + tax + shipping - discount;
+  const formatPrice = (price) =>
+    price.toFixed(2).replace(".", ",") + " DA";
+
+  if (loading) {
     return (
-      <div className="checkout-page">
-        <div className="empty-cart-warning">
-          <h2>Votre panier est vide</h2>
-          <button onClick={() => navigate("/cart")}>Retour au panier</button>
+      <div className="cart-page">
+        <div className="loading-cart">
+          <p>Chargement du panier...</p>
         </div>
       </div>
-    )
+    );
   }
 
-  // do any item require a customName at all?
-  const requiresCustom = cartItems.some(
-    (item) => item.product?.category?.customNameAllowed
-  )
-
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }))
-  }
-
-  const handleCustomNameChange = (idx, value) => {
-    setCustomNames((prev) => ({
-      ...prev,
-      [idx]: value,
-    }))
-  }
-
-  const handlePaymentMethodChange = (method) => {
-    setFormData((prev) => ({ ...prev, paymentMethod: method }))
-  }
-
-  const handleCardSelection = (card) => {
-    setSelectedCard(card)
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError(null)
-
-    // block if any required customName is still blank
-    if (requiresCustom) {
-      const missing = cartItems.filter(
-        (item, idx) =>
-          item.product?.category?.customNameAllowed &&
-          !(customNames[idx]?.trim())
-      )
-      if (missing.length > 0) {
-        alert(
-          "Veuillez entrer un nom personnalisé pour chaque produit requis."
-        )
-        return
-      }
-    }
-
-    setIsSubmitting(true)
-    try {
-      const orderItems = cartItems.map((item, index) => ({
-        product: item.product?._id || item.productId || item._id,
-        quantity: item.quantity,
-        priceAtPurchase:
-          item.product?.price ?? item.priceAtPurchase ?? 0,
-        size: item.size,
-        color: item.color,
-        customName: item.product?.category?.customNameAllowed
-          ? customNames[index].trim()
-          : null,
-      }))
-
-      const payload = {
-        items: orderItems,
-        paymentMethod:
-          formData.paymentMethod === "card"
-            ? "CarteEdahabia"
-            : "CashOnDelivery",
-        shippingInfo: {
-          city: formData.city,
-          phone: formData.phoneNumber,
-          email: user?.email || formData.email,
-        },
-        ...(!user && {
-          guestDetails: {
-            guestId,
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phoneNumber,
-            address: { city: formData.city },
-          },
-        }),
-      }
-
-      const token = localStorage.getItem("token")
-      const headers = {
-        "Content-Type": "application/json",
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      }
-
-      const response = await fetch(
-        "/api/orders",
-        {
-          method: "POST",
-          headers,
-          credentials: "include",
-          body: JSON.stringify(payload),
-        }
-      )
-      const data = await response.json()
-      if (!response.ok) throw new Error(data.error || "Erreur inconnue")
-
-      alert("Commande passée avec succès !")
-      navigate("/")
-    } catch (err) {
-      console.error("Erreur complète:", err)
-      setError(err.message)
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
 
   return (
     <div className="checkout-page">

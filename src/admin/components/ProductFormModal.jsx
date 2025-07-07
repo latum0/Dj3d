@@ -3,12 +3,26 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 
-function ProductFormModal({ show, product, categories, onClose, onSave, onError }) {
-    const [formData, setFormData] = useState({ name: "", description: "", price: "", category: "" })
-    const [imageFiles, setImageFiles] = useState([])
-    const [imagePreviews, setImagePreviews] = useState([])
-    const [loading, setLoading] = useState(false)
-    const [dragActive, setDragActive] = useState(false)
+function ProductFormModal({ show,
+    product,
+    categories,
+    onClose,
+    onSave,
+    onError,
+}) {
+    const RAW_API = import.meta.env.VITE_API_URL || "";
+    const API_BASE = RAW_API.replace(/\/$/, "");
+
+    const [formData, setFormData] = useState({
+        name: "",
+        description: "",
+        price: "",
+        category: "",
+    });
+    const [imageFiles, setImageFiles] = useState([]);
+    const [imagePreviews, setImagePreviews] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [dragActive, setDragActive] = useState(false);
 
     useEffect(() => {
         if (product) {
@@ -17,77 +31,82 @@ function ProductFormModal({ show, product, categories, onClose, onSave, onError 
                 description: product.description,
                 price: product.price.toString(),
                 category: product.category,
-            })
-            setImageFiles([])
-            setImagePreviews(Array.isArray(product.image) ? product.image : product.image ? [product.image] : [])
+            });
+            setImageFiles([]);
+            setImagePreviews(
+                Array.isArray(product.image)
+                    ? product.image
+                    : product.image
+                        ? [product.image]
+                        : []
+            );
         } else {
-            resetForm()
+            resetForm();
         }
-    }, [product])
+    }, [product]);
 
     const resetForm = () => {
-        setFormData({ name: "", description: "", price: "", category: "" })
-        setImageFiles([])
-        setImagePreviews([])
-    }
+        setFormData({ name: "", description: "", price: "", category: "" });
+        setImageFiles([]);
+        setImagePreviews([]);
+    };
 
-    const handleFilesChange = (files) => {
-        const fileArray = Array.from(files)
-        setImageFiles(fileArray)
+    const handleFilesChange = files => {
+        const fileArray = Array.from(files);
+        setImageFiles(fileArray);
+        const previews = fileArray.map(file => URL.createObjectURL(file));
+        setImagePreviews(previews);
+    };
 
-        // Create preview URLs
-        const previews = fileArray.map((file) => URL.createObjectURL(file))
-        setImagePreviews(previews)
-    }
+    const handleFileInput = e => {
+        handleFilesChange(e.target.files);
+    };
 
-    const handleFileInput = (e) => {
-        handleFilesChange(e.target.files)
-    }
-
-    const handleDrag = (e) => {
-        e.preventDefault()
-        e.stopPropagation()
+    const handleDrag = e => {
+        e.preventDefault();
+        e.stopPropagation();
         if (e.type === "dragenter" || e.type === "dragover") {
-            setDragActive(true)
+            setDragActive(true);
         } else if (e.type === "dragleave") {
-            setDragActive(false)
+            setDragActive(false);
         }
-    }
+    };
 
-    const handleDrop = (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        setDragActive(false)
-
+    const handleDrop = e => {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragActive(false);
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            handleFilesChange(e.dataTransfer.files)
+            handleFilesChange(e.dataTransfer.files);
         }
-    }
+    };
 
-    const removeImage = (index) => {
-        const newFiles = imageFiles.filter((_, i) => i !== index)
-        const newPreviews = imagePreviews.filter((_, i) => i !== index)
-        setImageFiles(newFiles)
-        setImagePreviews(newPreviews)
-    }
+    const removeImage = index => {
+        const newFiles = imageFiles.filter((_, i) => i !== index);
+        const newPreviews = imagePreviews.filter((_, i) => i !== index);
+        setImageFiles(newFiles);
+        setImagePreviews(newPreviews);
+    };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        setLoading(true)
+    const handleSubmit = async e => {
+        e.preventDefault();
+        setLoading(true);
+
         try {
-            const token = localStorage.getItem("token")
-            let imageUrls = []
+            const token = localStorage.getItem("token");
+            let imageUrls = [];
 
             if (imageFiles.length > 0) {
-                const uploadData = new FormData()
-                imageFiles.forEach((file) => uploadData.append("files", file))
-                const uploadRes = await axios.post("/api/upload", uploadData, {
-                    headers: { Authorization: `Bearer ${token}` },
-                })
-                imageUrls = uploadRes.data.urls || []
+                const uploadData = new FormData();
+                imageFiles.forEach(f => uploadData.append("files", f));
+                const uploadRes = await axios.post(
+                    `${API_BASE}/upload`,
+                    uploadData,
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+                imageUrls = uploadRes.data.urls || [];
             } else if (product && imagePreviews.length > 0) {
-                // Keep existing images if no new files uploaded
-                imageUrls = imagePreviews
+                imageUrls = imagePreviews;
             }
 
             const payload = {
@@ -96,31 +115,39 @@ function ProductFormModal({ show, product, categories, onClose, onSave, onError 
                 price: Number.parseFloat(formData.price),
                 category: formData.category,
                 image: imageUrls,
-            }
+            };
 
-            const config = { headers: { Authorization: `Bearer ${token}` } }
+            const config = { headers: { Authorization: `Bearer ${token}` } };
             if (product) {
-                await axios.put(`/api/products/${product._id}`, payload, config)
+                await axios.put(
+                    `${API_BASE}/products/${product._id}`,
+                    payload,
+                    config
+                );
             } else {
-                await axios.post("/api/products", payload, config)
+                await axios.post(
+                    `${API_BASE}/products`,
+                    payload,
+                    config
+                );
             }
 
-            onSave()
-            resetForm()
+            onSave();
+            resetForm();
         } catch (err) {
-            console.error("Submission error:", err.response || err)
-            onError(err.response?.data?.message || "Erreur lors de la sauvegarde")
+            console.error("Submission error:", err.response || err);
+            onError(err.response?.data?.message || "Erreur lors de la sauvegarde");
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
 
     const handleClose = () => {
-        resetForm()
-        onClose()
-    }
+        resetForm();
+        onClose();
+    };
 
-    if (!show) return null
+    if (!show) return null;
 
     return (
         <div className="products-management-modal-overlay">

@@ -5,35 +5,36 @@ import React, { useState, useEffect } from "react"
 import axios from "axios"
 // adjust path as needed
 
+
 export default function OrderAddingModal({
     show,
     onClose,
     onOrderAdd,
     onError,
 }) {
-    // 1️⃣ Fetch product list on mount
-    const [productOptions, setProductOptions] = useState([])
-    useEffect(() => {
-        ; (async () => {
-            try {
-                const token = localStorage.getItem("token")
-                const resp = await axios.get(
-                    "/api/products",
-                    { headers: { Authorization: `Bearer ${token}` } }
-                )
-                const list = Array.isArray(resp.data.data)
-                    ? resp.data.data
-                    : Array.isArray(resp.data)
-                        ? resp.data
-                        : resp.data.data
-                setProductOptions(list)
-            } catch (err) {
-                console.error("Could not load products:", err)
-            }
-        })()
-    }, [])
+    // Build the base API URL from your VITE env var
+    const RAW_API = import.meta.env.VITE_API_URL || "";
+    const API_BASE = RAW_API.replace(/\/$/, "");
 
-    // 2️⃣ Your existing initial state
+    // 1️⃣ Fetch product list on mount
+    const [productOptions, setProductOptions] = useState([]);
+    useEffect(() => {
+        (async () => {
+            try {
+                const token = localStorage.getItem("token");
+                const resp = await axios.get(
+                    `${API_BASE}/products`,
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+                const data = resp.data.data ?? resp.data;
+                setProductOptions(Array.isArray(data) ? data : []);
+            } catch (err) {
+                console.error("Could not load products:", err);
+            }
+        })();
+    }, [API_BASE]);
+
+    // 2️⃣ Initial new‐order state
     const initialNewOrder = {
         guestDetails: {
             name: "",
@@ -43,7 +44,7 @@ export default function OrderAddingModal({
         },
         items: [
             {
-                product: "",            // now will hold a product _id
+                product: "",
                 quantity: 1,
                 priceAtPurchase: 0,
                 size: "",
@@ -61,11 +62,12 @@ export default function OrderAddingModal({
         },
         paymentMethod: "CreditCard",
         status: "Pending",
-    }
+    };
 
-    const [newOrder, setNewOrder] = useState(initialNewOrder)
-    const [loading, setLoading] = useState(false)
+    const [newOrder, setNewOrder] = useState(initialNewOrder);
+    const [loading, setLoading] = useState(false);
 
+    // Handle field changes
     const handleAddOrderInputChange = (
         field,
         value,
@@ -73,26 +75,26 @@ export default function OrderAddingModal({
         subField = null
     ) => {
         setNewOrder((prev) => {
-            const copy = { ...prev }
+            const copy = { ...prev };
             if (field === "items" && index !== null) {
-                copy.items[index] = { ...copy.items[index], [subField]: value }
+                copy.items[index] = { ...copy.items[index], [subField]: value };
             } else if (field === "guestDetails" && subField) {
                 if (subField === "address") {
                     copy.guestDetails.address = {
                         ...copy.guestDetails.address,
                         ...value,
-                    }
+                    };
                 } else {
-                    copy.guestDetails[subField] = value
+                    copy.guestDetails[subField] = value;
                 }
             } else if (field === "shippingInfo" && subField) {
-                copy.shippingInfo[subField] = value
+                copy.shippingInfo[subField] = value;
             } else {
-                copy[field] = value
+                copy[field] = value;
             }
-            return copy
-        })
-    }
+            return copy;
+        });
+    };
 
     const addOrderItem = () =>
         setNewOrder((prev) => ({
@@ -101,56 +103,53 @@ export default function OrderAddingModal({
                 ...prev.items,
                 { product: "", quantity: 1, priceAtPurchase: 0, size: "", color: "", customName: "" },
             ],
-        }))
+        }));
 
     const removeOrderItem = (i) =>
         setNewOrder((prev) => ({
             ...prev,
             items: prev.items.filter((_, idx) => idx !== i),
-        }))
+        }));
 
     const calculateTotal = () =>
-        newOrder.items.reduce((sum, it) => sum + it.priceAtPurchase * it.quantity, 0)
+        newOrder.items.reduce((sum, it) => sum + it.priceAtPurchase * it.quantity, 0);
 
+    // Submit the new order
     const handleSubmitNewOrder = async (e) => {
-        e.preventDefault()
-        setLoading(true)
+        e.preventDefault();
+        setLoading(true);
         try {
-            const token = localStorage.getItem("token")
+            const token = localStorage.getItem("token");
             const payload = {
                 ...newOrder,
                 isGuest: true,
                 totalAmount: calculateTotal(),
-            }
+            };
             const resp = await axios.post(
-                "/api/orders",
+                `${API_BASE}/orders`,
                 payload,
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
-            )
-            const created = resp.data.data
-            onOrderAdd(created)
-            onClose()
-            setNewOrder(initialNewOrder)
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            onOrderAdd(resp.data.data);
+            onClose();
+            setNewOrder(initialNewOrder);
         } catch (err) {
-            console.error("Error creating order:", err.response || err)
+            console.error("Error creating order:", err.response || err);
             onError(
                 err.response?.data?.message ||
                 "Erreur lors de la création de la commande"
-            )
+            );
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
 
     const handleClose = () => {
-        onClose()
-        setNewOrder(initialNewOrder)
-    }
+        onClose();
+        setNewOrder(initialNewOrder);
+    };
 
-    if (!show) return null
-
+    if (!show) return null;
     return (
         <div className="orders-management-modal-overlay">
             <div className="orders-management-modal orders-management-modern-modal orders-management-add-order-modal">

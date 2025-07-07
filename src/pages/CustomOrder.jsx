@@ -11,6 +11,8 @@ const CustomOrder = () => {
     const navigate = useNavigate()
     const { user, guestId } = useAuth()
     const isGuest = !user
+    const RAW_API = import.meta.env.VITE_API_URL || "";
+    const API_BASE = RAW_API.replace(/\/$/, "");
 
     // 1. State
     const [orderItems, setOrderItems] = useState([
@@ -159,7 +161,7 @@ const CustomOrder = () => {
             }
 
             await axios.post(
-                "/api/orders",
+                `${API_BASE}/orders`,
                 payload,
                 {
                     headers: {
