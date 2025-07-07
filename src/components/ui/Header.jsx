@@ -8,7 +8,7 @@ import {
   MdDesignServices,
 } from "react-icons/md";
 import { useAuth } from "../../context/AuthContext";
-import neoLogo from "../../assets/logoNeo"
+import neoLogo from "../../assets/logoNeo.png"
 
 const Header = () => {
   const RAW_API = import.meta.env.VITE_API_URL || "";
