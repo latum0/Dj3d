@@ -8,6 +8,7 @@ import {
   MdDesignServices,
 } from "react-icons/md";
 import { useAuth } from "../../context/AuthContext";
+import neoLogo from "../../assets/logoNeo"
 
 const Header = () => {
   const RAW_API = import.meta.env.VITE_API_URL || "";
@@ -125,7 +126,7 @@ const Header = () => {
 
           <div className="main-navbar-logo" onClick={() => navigate("/")}>
             <img
-              src="/src/assets/logoNeo.png"
+              src={neoLogo}
               alt="Logo"
               className="main-logo-img"
             />
