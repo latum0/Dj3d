@@ -502,15 +502,6 @@ const Product = () => {
           {activeTab === "description" && (
             <div className="tab-pane">
               <p>{product.description}</p>
-              <p>
-                The ASUS TUF GAMING X670E-PLUS WIFI motherboard delivers rock-solid performance with a robust power
-                solution, comprehensive cooling, and extensive connectivity options. Built with military-grade
-                components, this motherboard is designed for durability and reliability.
-              </p>
-              <p>
-                Featuring PCIe 5.0, DDR5 memory support, and WiFi 6E connectivity, the TUF GAMING X670E-PLUS WIFI
-                provides cutting-edge performance for AMD Ryzen 7000 series processors.
-              </p>
             </div>
           )}
 
@@ -518,44 +509,22 @@ const Product = () => {
             <div className="tab-pane">
               <div className="specs-grid">
                 <div className="spec-group">
-                  <h3>CPU</h3>
-                  <p>AMD AM5 Socket for AMD Ryzen 7000 Series Desktop Processors</p>
+
                 </div>
                 <div className="spec-group">
-                  <h3>Chipset</h3>
-                  <p>AMD X670E Chipset</p>
+
                 </div>
                 <div className="spec-group">
-                  <h3>Memory</h3>
-                  <p>
-                    4 x DIMM, Max. 128GB, DDR5 6400+(OC)/6200(OC)/6000(OC)/5800(OC)/5600/5400/5200/5000/4800 Non-ECC,
-                    Un-buffered Memory
-                  </p>
+
                 </div>
                 <div className="spec-group">
-                  <h3>Expansion Slots</h3>
-                  <p>
-                    1 x PCIe 5.0 x16 slot
-                    <br />1 x PCIe 4.0 x16 slot (x4 mode)
-                    <br />1 x PCIe 3.0 x1 slot
-                  </p>
+
                 </div>
                 <div className="spec-group">
-                  <h3>Storage</h3>
-                  <p>
-                    4 x M.2 slots (PCIe 4.0 x4)
-                    <br />4 x SATA 6Gb/s ports
-                  </p>
+
                 </div>
                 <div className="spec-group">
-                  <h3>Networking</h3>
-                  <p>
-                    1 x 2.5Gb Ethernet
-                    <br />
-                    WiFi 6E (802.11a/b/g/n/ac/ax)
-                    <br />
-                    Bluetooth 5.2
-                  </p>
+
                 </div>
               </div>
             </div>
@@ -578,52 +547,7 @@ const Product = () => {
                 <button className="write-review-btn">Write a Review</button>
               </div>
 
-              <div className="reviews-list">
-                {[
-                  {
-                    name: "Ahmed K.",
-                    date: "May 2, 2025",
-                    rating: 5,
-                    title: "Excellent motherboard for my Ryzen 9 build",
-                    content:
-                      "I've been using this motherboard for about a month now with a Ryzen 9 7900X and it's been rock solid. The BIOS is easy to navigate, and the board has all the features I need.",
-                  },
-                  {
-                    name: "Sarah L.",
-                    date: "April 15, 2025",
-                    rating: 4,
-                    title: "Good value for an X670E board",
-                    content:
-                      "This is a solid motherboard with good features for the price. The only reason I'm giving it 4 stars instead of 5 is because the M.2 heatsinks are a bit finicky to install.",
-                  },
-                  {
-                    name: "Mohammed R.",
-                    date: "March 28, 2025",
-                    rating: 3,
-                    title: "Decent board but BIOS issues",
-                    content:
-                      "The hardware is good quality, but I had some issues with the BIOS that required updating. After the update things have been better, but it was frustrating to deal with initially.",
-                  },
-                ].map((review, index) => (
-                  <div key={index} className="review-item">
-                    <div className="review-header">
-                      <div className="reviewer-info">
-                        <h4>{review.name}</h4>
-                        <span className="review-date">{review.date}</span>
-                      </div>
-                      <div className="review-rating">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                          <span key={star} className={`star ${star <= review.rating ? "filled" : ""}`}>
-                            ★
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <h3 className="review-title">{review.title}</h3>
-                    <p className="review-content">{review.content}</p>
-                  </div>
-                ))}
-              </div>
+
             </div>
           )}
         </div>

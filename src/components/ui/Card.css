@@ -1,4 +1,3 @@
-/* Card container */
 .product-card {
   background: #ffffff;
   border-radius: 10px;
@@ -97,6 +96,7 @@
 .description-section {
   padding: 1.5rem;
 }
+
 
 .product-title {
   font-size: 1.1rem;
