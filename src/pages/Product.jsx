@@ -227,7 +227,7 @@ const Product = () => {
 
         {/* Product Info */}
         <div className="product-info-section">
-          <div className="product-brand">{product.brand || "ASUS"}</div>
+          <div className="product-brand">{product.brand || ""}</div>
           <h1 className="product-title">{product.name}</h1>
 
           <div className="product-rating">
@@ -444,7 +444,7 @@ const Product = () => {
             <div className="meta-item">
               <span className="meta-label">Brand:</span>
               <span className="meta-value">
-                {product.brand || "ASUS"}
+                {product.brand || ""}
               </span>
             </div>
           </div>

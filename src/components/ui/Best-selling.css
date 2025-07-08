@@ -46,13 +46,31 @@
     transform: translateY(0);
 }
 
-/* Loading and error states */
-.products-grid p {
+/* Loading and error states - only target direct paragraph elements */
+.products-grid>p {
     grid-column: 1 / -1;
     text-align: center;
     padding: 40px 20px;
     font-size: 16px;
     color: #666;
+    margin: 0;
+}
+
+/* Animation for loading state */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.products-grid {
+    animation: fadeIn 0.5s ease-out;
 }
 
 /* Responsive Design */
@@ -147,25 +165,126 @@
     }
 }
 
-/* Animation for loading state */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .view-all-button:hover {
+        transform: none;
+        background-color: #007BFF;
+        box-shadow: none;
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    .view-all-button:active {
+        transform: translateY(1px);
+        background-color: #0056b3;
     }
 }
 
-.products-grid {
-    animation: fadeIn 0.5s ease-out;
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+    .view-all-button {
+        box-shadow: 0 2px 6px rgba(0, 123, 255, 0.2);
+    }
 }
 
-/* Ensure cards maintain aspect ratio */
-.products-grid>* {
-    width: 100%;
-    height: auto;
+/* Focus states for accessibility */
+.view-all-button:focus {
+    outline: 2px solid #007BFF;
+    outline-offset: 2px;
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.products-grid>p.loading {
+    position: relative;
+}
+
+.products-grid>p.loading::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #007BFF;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+/* Error state styling */
+.products-grid>p.error {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    padding: 20px;
+}
+
+/* Empty state styling */
+.products-grid>p.empty {
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Print styles */
+@media print {
+    .view-all-button {
+        display: none;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .sales-container {
+        padding: 0;
+    }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .view-all-button {
+        transition: none;
+    }
+
+    .view-all-button:hover {
+        transform: none;
+    }
+
+    .products-grid {
+        animation: none;
+    }
+
+    @keyframes fadeIn {
+
+        from,
+        to {
+            opacity: 1;
+            transform: none;
+        }
+    }
+}
+
+/* Dark mode support (if needed) */
+@media (prefers-color-scheme: dark) {
+    .products-grid>p {
+        color: #adb5bd;
+    }
+
+    .products-grid>p.error {
+        color: #f8d7da;
+        background-color: #721c24;
+        border-color: #a94442;
+    }
 }

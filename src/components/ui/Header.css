@@ -313,7 +313,7 @@
   .main-cart-logo,
   .main-profile-logo,
   .main-logout-icon {
-    font-size: 2.2rem;
+    font-size: 4rem;
   }
 }
 
@@ -384,7 +384,7 @@
   .main-cart-logo,
   .main-profile-logo,
   .main-logout-icon {
-    font-size: 2rem;
+    font-size: 3.8rem;
   }
 
   /* Only add body padding on mobile */
@@ -417,7 +417,7 @@
   .main-cart-logo,
   .main-profile-logo,
   .main-logout-icon {
-    font-size: 1.8rem;
+    font-size: 3.5rem;
   }
 
   .main-logo-img {
