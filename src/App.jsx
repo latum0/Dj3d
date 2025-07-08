@@ -31,8 +31,9 @@ import ClientsAdmin from "./admin/pages/Clients";
 import PaymentsAdmin from "./admin/pages/Payments";
 import TransactionsAdmin from "./admin/pages/Transactions";
 import CategoryManagement from "./admin/pages/CategoryManagement";
+import ScrollToTop from "./utils/ScrollToTop";
 
-import ProductManagement from "./pages/seller/EditProduct";
+
 
 import "./App.css";
 
@@ -72,7 +73,7 @@ function LayoutWrapper() {
         <Route path="/productlistingpage" element={<ProductListingPage />} />
 
 
-        <Route path="/Editproducts" element={<ProductManagement />} />
+
         <Route path="/custom-order" element={<CustomOrder />} />
 
         {/* Admin (protected) */}
@@ -96,6 +97,7 @@ function LayoutWrapper() {
 export default function App() {
   return (
     <Router>
+      <ScrollToTop />
       <LayoutWrapper />
     </Router>
   );

@@ -1,5 +1,5 @@
 import React from 'react'
-import Diviser from './Diviser'
+
 import './New.css'
 
 function New() {
