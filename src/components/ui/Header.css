@@ -386,6 +386,11 @@
   .main-logout-icon {
     font-size: 2rem;
   }
+
+  /* Only add body padding on mobile */
+  body {
+    padding-top: 140px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -418,20 +423,7 @@
   .main-logo-img {
     width: 100px;
   }
-}
 
-/* ---------- Global Body Padding for Fixed Header ---------- */
-body {
-  padding-top: 80px;
-}
-
-@media (max-width: 768px) {
-  body {
-    padding-top: 140px;
-  }
-}
-
-@media (max-width: 480px) {
   body {
     padding-top: 130px;
   }
